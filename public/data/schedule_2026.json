@@ -1,0 +1,23 @@
+{
+  "season": 2026,
+  "note": "Known 2026 schedule/opponent center. Dates/times can be refreshed from ESPN/nflverse when final data is updated.",
+  "games": [
+    {"week":"Week 1","date":"Sept. 10","opponent":"Los Angeles Rams","homeAway":"at","venue":"Melbourne Cricket Ground","location":"Melbourne, Australia","type":"Regular Season","international":true,"primetime":true,"logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lar.png"},
+    {"week":"Home","date":"TBD","opponent":"Miami Dolphins","homeAway":"vs","venue":"Levi's Stadium","location":"Santa Clara, CA","type":"Home Opponent","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/mia.png"},
+    {"week":"Home","date":"TBD","opponent":"Arizona Cardinals","homeAway":"vs","venue":"Levi's Stadium","location":"Santa Clara, CA","type":"NFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/ari.png"},
+    {"week":"Home","date":"TBD","opponent":"Denver Broncos","homeAway":"vs","venue":"Levi's Stadium","location":"Santa Clara, CA","type":"AFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/den.png"},
+    {"week":"Home","date":"TBD","opponent":"Washington Commanders","homeAway":"vs","venue":"Levi's Stadium","location":"Santa Clara, CA","type":"NFC East","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png"},
+    {"week":"Home","date":"TBD","opponent":"Las Vegas Raiders","homeAway":"vs","venue":"Levi's Stadium","location":"Santa Clara, CA","type":"AFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lv.png"},
+    {"week":"Week 11","date":"Nov. 22","opponent":"Minnesota Vikings","homeAway":"vs","venue":"Estadio Banorte","location":"Mexico City, Mexico","type":"International","international":true,"primetime":true,"logo":"https://a.espncdn.com/i/teamlogos/nfl/500/min.png"},
+    {"week":"Home","date":"TBD","opponent":"Seattle Seahawks","homeAway":"vs","venue":"Levi's Stadium","location":"Santa Clara, CA","type":"NFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/sea.png"},
+    {"week":"Home","date":"TBD","opponent":"Philadelphia Eagles","homeAway":"vs","venue":"Levi's Stadium","location":"Santa Clara, CA","type":"NFC East","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/phi.png"},
+    {"week":"Away","date":"TBD","opponent":"Los Angeles Rams","homeAway":"at","venue":"SoFi Stadium","location":"Inglewood, CA","type":"NFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lar.png"},
+    {"week":"Away","date":"TBD","opponent":"Seattle Seahawks","homeAway":"at","venue":"Lumen Field","location":"Seattle, WA","type":"NFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/sea.png"},
+    {"week":"Away","date":"TBD","opponent":"Atlanta Falcons","homeAway":"at","venue":"Mercedes-Benz Stadium","location":"Atlanta, GA","type":"NFC South","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/atl.png"},
+    {"week":"Away","date":"TBD","opponent":"Dallas Cowboys","homeAway":"at","venue":"AT&T Stadium","location":"Arlington, TX","type":"NFC East","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/dal.png"},
+    {"week":"Away","date":"TBD","opponent":"New York Giants","homeAway":"at","venue":"MetLife Stadium","location":"East Rutherford, NJ","type":"NFC East","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png"},
+    {"week":"Away","date":"TBD","opponent":"Los Angeles Chargers","homeAway":"at","venue":"SoFi Stadium","location":"Inglewood, CA","type":"AFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lac.png"},
+    {"week":"Away","date":"TBD","opponent":"Kansas City Chiefs","homeAway":"at","venue":"GEHA Field at Arrowhead","location":"Kansas City, MO","type":"AFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/kc.png"},
+    {"week":"Away","date":"TBD","opponent":"Arizona Cardinals","homeAway":"at","venue":"State Farm Stadium","location":"Glendale, AZ","type":"NFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/ari.png"}
+  ]
+}

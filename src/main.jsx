@@ -1,9 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
-import { Activity, BarChart3, Download, Flame, Gauge, Shield, Sparkles, Trophy, Zap } from 'lucide-react';
+import { Activity, BarChart3, CalendarDays, Download, Flame, Gauge, MapPin, Plane, Shield, Sparkles, Trophy, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './styles.css';
+
+const tabs = [
+  { id: 'dashboard', label: 'Command Center', icon: BarChart3 },
+  { id: 'schedule', label: '2026 Schedule', icon: CalendarDays },
+  { id: 'players', label: 'Player Lab', icon: Trophy },
+];
 
 const statOptions = [
   { id: 'epa', label: 'EPA Trend', desc: 'Offensive EPA vs defensive EPA allowed', icon: Activity },
@@ -19,12 +25,16 @@ const metricLabels = {
   proe: 'PROE', pass_epa: 'Pass EPA', rush_epa: 'Rush EPA', third_down: '3rd Down %', red_zone: 'Red Zone %', turnover_margin: 'TO Margin'
 };
 
-function useSeasonData(season) {
+function useJson(path) {
   const [data, setData] = useState(null);
   useEffect(() => {
-    fetch(`/data/metrics_${season}.json`).then(r => r.json()).then(setData);
-  }, [season]);
+    fetch(path).then(r => r.json()).then(setData).catch(() => setData(null));
+  }, [path]);
   return data;
+}
+
+function useSeasonData(season) {
+  return useJson(`/data/metrics_${season}.json`);
 }
 
 function GlassCard({ children, className = '' }) { return <div className={`glass ${className}`}>{children}</div>; }
@@ -49,14 +59,45 @@ function MainChart({ data, chart }) {
   return <PlayerBoard players={data.players}/>;
 }
 
+
+function ScheduleCenter({ schedule }) {
+  if (!schedule) return <GlassCard className="empty"><h2>Loading schedule...</h2></GlassCard>;
+  return <section className="scheduleWrap">
+    <div className="scheduleHero glass">
+      <div>
+        <p className="eyebrow"><Plane size={16}/> International Season Preview</p>
+        <h2>2026 49ers Schedule Center</h2>
+        <p>{schedule.note}</p>
+      </div>
+      <div className="scheduleBadges">
+        <span>Australia opener</span>
+        <span>Mexico City game</span>
+        <span>17-game slate</span>
+      </div>
+    </div>
+
+    <div className="scheduleGrid">
+      {schedule.games.map((g) => <motion.div whileHover={{ y: -4 }} className="gameCard glass" key={`${g.week}-${g.opponent}`}>
+        <div className="gameTop"><span>{g.week}</span><b>{g.date || 'TBD'}</b></div>
+        <div className="matchup"><img src="/logos/sf.svg"/><span>{g.homeAway === 'vs' ? 'vs' : '@'}</span><img src={g.logo}/></div>
+        <h3>{g.opponent}</h3>
+        <p><MapPin size={15}/> {g.venue || g.location}</p>
+        <div className="tags"><span>{g.type}</span>{g.primetime && <span>Prime Time</span>}{g.international && <span>International</span>}</div>
+      </motion.div>)}
+    </div>
+  </section>;
+}
+
 function PlayerBoard({ players }) {
   return <div className="players">{players.map(p => <motion.div whileHover={{ y: -4 }} className="player" key={p.player}><img src={p.headshot} /><div><b>{p.player}</b><span>{p.position}</span></div><div className="playerStats">{Object.entries(p).filter(([k]) => !['player','position','headshot'].includes(k)).slice(0,5).map(([k,v]) => <p key={k}><span>{k.replaceAll('_',' ')}</span><b>{v}</b></p>)}</div></motion.div>)}</div>;
 }
 
 function App() {
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [season, setSeason] = useState(2025);
   const [chart, setChart] = useState('epa');
   const data = useSeasonData(season);
+  const schedule = useJson('/data/schedule_2026.json');
   const selected = statOptions.find(s => s.id === chart);
   const summary = useMemo(() => {
     const weeks = data?.weeks || [];
@@ -65,23 +106,28 @@ function App() {
     return { off: avg('off_epa').toFixed(2), succ: avg('success_rate').toFixed(1), exp: avg('explosive_rate').toFixed(1), rz: avg('red_zone').toFixed(1) };
   }, [data]);
   return <main>
-    <section className="hero">
-      <div><p className="eyebrow"><Flame size={16}/> 49ers Elite Analytics</p><h1>Premium 49ers data visuals powered by nflverse-ready data.</h1><p className="sub">Fast, free, Vercel-ready dashboard with saved local data, advanced stats, player cards, and a clean sports-broadcast look.</p></div>
+    <section className="hero compact">
+      <div><p className="eyebrow"><Flame size={16}/> NinerVision</p><h1>Elite 49ers Intelligence Platform</h1><p className="sub">Advanced stats, player lab, game trends, and schedule intelligence built for speed.</p></div>
       <img className="logo" src="/logos/sf.svg" />
     </section>
 
-    <section className="controls glass">
+    <nav className="tabs glass">{tabs.map(({id,label,icon:Icon}) => <button key={id} className={activeTab===id?'active':''} onClick={()=>setActiveTab(id)}><Icon size={18}/>{label}</button>)}</nav>
+
+    {activeTab === 'dashboard' && <section className="controls glass">
       <label>Season<select value={season} onChange={e=>setSeason(e.target.value)}><option>2025</option><option>2026</option></select></label>
       <label>Graph Type<select value={chart} onChange={e=>setChart(e.target.value)}>{statOptions.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}</select></label>
       <button onClick={() => window.print()}><Download size={18}/> Export</button>
-    </section>
+    </section>}
 
-    {summary && <section className="kpis"><GlassCard><span>Off EPA</span><b>{summary.off}</b></GlassCard><GlassCard><span>Success Rate</span><b>{summary.succ}%</b></GlassCard><GlassCard><span>Explosive Rate</span><b>{summary.exp}%</b></GlassCard><GlassCard><span>Red Zone</span><b>{summary.rz}%</b></GlassCard></section>}
+    {activeTab === 'schedule' && <ScheduleCenter schedule={schedule}/>}
+    {activeTab === 'players' && data && <GlassCard className="chartCard"><div className="chartHead"><div><h2>Player Lab</h2><p>Real headshots will plug in from nflverse/ESPN mapping next.</p></div><Trophy /></div><PlayerBoard players={data.players || []}/></GlassCard>}
 
-    <section className="grid">
+    {activeTab === 'dashboard' && summary && <section className="kpis"><GlassCard><span>Off EPA</span><b>{summary.off}</b></GlassCard><GlassCard><span>Success Rate</span><b>{summary.succ}%</b></GlassCard><GlassCard><span>Explosive Rate</span><b>{summary.exp}%</b></GlassCard><GlassCard><span>Red Zone</span><b>{summary.rz}%</b></GlassCard></section>}
+
+    {activeTab === 'dashboard' && <section className="grid">
       <GlassCard className="chartCard"><div className="chartHead"><div><h2>{selected?.label}</h2><p>{selected?.desc}</p></div><BarChart3 /></div>{data ? <MainChart data={data} chart={chart}/> : <p>Loading...</p>}</GlassCard>
       <GlassCard className="side"><h3>Graph Library</h3>{statOptions.map(({id,label,desc,icon:Icon}) => <button className={chart===id?'active':''} onClick={()=>setChart(id)} key={id}><Icon size={18}/><span><b>{label}</b><small>{desc}</small></span></button>)}</GlassCard>
-    </section>
+    </section>}
   </main>;
 }
 

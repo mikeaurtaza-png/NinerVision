@@ -1,190 +1,154 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer,
-  Tooltip, XAxis, YAxis, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
+  Area, AreaChart, Bar, BarChart, CartesianGrid, ComposedChart, Line, LineChart,
+  ResponsiveContainer, Radar, RadarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis,
+  Tooltip, XAxis, YAxis
 } from 'recharts';
 import {
-  Activity, BarChart3, CalendarDays, ChevronRight, Download, Flame, Gauge, Layers,
-  LineChart as LineIcon, Search, Shield, Sparkles, Trophy, Users, Zap
+  Activity, BarChart3, CalendarDays, ChevronRight, Download, Gauge, Home, Layers,
+  LineChart as LineIcon, Search, Shield, Sparkles, Trophy, Users, Zap, Target, Swords,
+  TrendingUp, Flame, Eye, Table2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './styles.css';
 
-const ESPN_49ERS_LOGO = 'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png';
-const ESPN_ROSTER = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/sf/roster';
-const ESPN_SCHEDULE_2026 = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/sf/schedule?season=2026';
-
-const navItems = [
-  { id: 'command', label: 'Command Center', icon: BarChart3 },
+const pages = [
+  { id: 'command', label: 'Command Center', icon: Home },
   { id: 'players', label: 'Player Lab', icon: Users },
+  { id: 'charts', label: 'Visual Lab', icon: LineIcon },
   { id: 'schedule', label: '2026 Schedule', icon: CalendarDays },
-  { id: 'visuals', label: 'Visual Lab', icon: LineIcon },
+  { id: 'data', label: 'Data Table', icon: Table2 },
 ];
 
 const chartOptions = [
-  { id: 'epa', label: 'EPA Profile', desc: 'Offense, pass, rush, and defensive EPA trend', icon: Activity },
-  { id: 'success', label: 'Success Rate', desc: 'Weekly efficiency and consistency', icon: Gauge },
-  { id: 'explosive', label: 'Explosive Rate', desc: 'Chunk-play creation and turnover impact', icon: Zap },
-  { id: 'situational', label: 'Situational Football', desc: '3rd down and red zone performance', icon: Shield },
-  { id: 'radar', label: 'Team Radar', desc: 'At-a-glance efficiency profile', icon: Sparkles },
+  { id: 'epa', label: 'EPA Trend', desc: 'Offense, pass, rush, and defensive EPA', icon: Activity },
+  { id: 'success', label: 'Success Rate', desc: 'Weekly consistency and efficiency', icon: Gauge },
+  { id: 'explosive', label: 'Explosive Profile', desc: 'Chunk plays, YAC and play-action', icon: Zap },
+  { id: 'situational', label: 'Situational Football', desc: '3rd down, red zone, goal-to-go', icon: Shield },
+  { id: 'scoring', label: 'Game Flow', desc: 'Points, EPA and win-probability swings', icon: TrendingUp },
+  { id: 'radar', label: 'Team Radar', desc: 'Premium all-around team profile', icon: Sparkles },
 ];
 
-const labels = {
-  off_epa: 'Off EPA', def_epa_allowed: 'Def EPA Allowed', pass_epa: 'Pass EPA', rush_epa: 'Rush EPA',
-  success_rate: 'Success %', explosive_rate: 'Explosive %', third_down: '3rd Down %', red_zone: 'Red Zone %',
-  turnover_margin: 'TO Margin'
-};
+const colors = { red: '#c31828', gold: '#b3995d', white: '#ffffff', gray: '#9da0a6', dark: '#090909' };
 
-function useJson(path) {
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    fetch(path).then(r => r.json()).then(setData).catch(() => setData(null));
-  }, [path]);
+function useJson(path, fallback) {
+  const [data, setData] = useState(fallback);
+  useEffect(() => { fetch(path).then(r => r.json()).then(setData).catch(() => setData(fallback)); }, [path]);
   return data;
 }
 
 function useEspnRoster() {
-  const [players, setPlayers] = useState([]);
+  const [live, setLive] = useState([]);
   useEffect(() => {
-    fetch(ESPN_ROSTER)
+    fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/sf/roster')
       .then(r => r.json())
       .then(json => {
         const groups = json.athletes || [];
         const flat = groups.flatMap(group => (group.items || []).map(a => ({
-          id: a.id,
-          name: a.displayName || a.fullName,
-          pos: a.position?.abbreviation || group.position || '',
-          number: a.jersey || '',
-          age: a.age || '',
-          height: a.displayHeight || '',
-          weight: a.displayWeight || '',
+          id: a.id, name: a.displayName || a.fullName, pos: a.position?.abbreviation || '', number: a.jersey || '',
           photo: a.headshot?.href || `https://a.espncdn.com/i/headshots/nfl/players/full/${a.id}.png`
         })));
-        setPlayers(flat);
+        setLive(flat);
       })
-      .catch(() => setPlayers([]));
+      .catch(() => setLive([]));
   }, []);
-  return players;
+  return live;
 }
 
-function useEspnSchedule2026() {
-  const [games, setGames] = useState([]);
-  useEffect(() => {
-    fetch(ESPN_SCHEDULE_2026)
-      .then(r => r.json())
-      .then(json => {
-        const events = json.events || [];
-        const mapped = events.map((e, i) => {
-          const comp = e.competitions?.[0] || {};
-          const teams = comp.competitors || [];
-          const away = teams.find(t => t.homeAway === 'away');
-          const home = teams.find(t => t.homeAway === 'home');
-          const opp = teams.find(t => t.team?.abbreviation !== 'SF');
-          return {
-            week: e.week?.text || `Week ${i + 1}`,
-            date: e.date ? new Date(e.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'TBD',
-            name: e.name || '49ers Game',
-            opponent: opp?.team?.displayName || 'Opponent TBD',
-            logo: opp?.team?.logos?.[0]?.href || '',
-            homeAway: home?.team?.abbreviation === 'SF' ? 'vs' : '@',
-            venue: comp.venue?.fullName || 'TBD',
-            status: e.status?.type?.description || 'Scheduled'
-          };
-        });
-        setGames(mapped);
-      })
-      .catch(() => setGames([]));
-  }, []);
-  return games;
-}
-
-function StatCard({ label, value, detail, icon: Icon }) {
-  return <motion.div whileHover={{ y: -3 }} className="metric-card">
-    <div className="metric-icon"><Icon size={18}/></div>
-    <span>{label}</span>
-    <b>{value}</b>
-    <small>{detail}</small>
+function StatCard({ kpi, index }) {
+  return <motion.div className="stat-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * .04 }}>
+    <div className="stat-label">{kpi.label}</div>
+    <div className="stat-value">{kpi.value}</div>
+    <div className="stat-foot"><span>{kpi.rank}</span><b>{kpi.trend}</b></div>
   </motion.div>;
 }
 
-function TooltipBox({ active, payload, label }) {
-  if (!active || !payload?.length) return null;
-  return <div className="tip"><b>Week {label}</b>{payload.map(p => <p key={p.dataKey}>{labels[p.dataKey] || p.dataKey}: {Number(p.value).toFixed(2)}</p>)}</div>;
+function TopNav({ page, setPage, team }) {
+  return <aside className="sidebar">
+    <div className="brand"><div><span>NINER</span><b>VISION</b></div><small>Elite 49ers Intelligence</small></div>
+    <img className="team-logo-xl" src={team.logo} alt="49ers logo" />
+    <nav>{pages.map(item => { const Icon = item.icon; return <button key={item.id} onClick={() => setPage(item.id)} className={page === item.id ? 'active' : ''}><Icon size={18} />{item.label}</button>; })}</nav>
+    <div className="side-card"><small>Data Stack</small><b>nflverse + ESPN</b><p>Local JSON first. Live assets second. Built for fast Vercel deployment.</p></div>
+  </aside>;
 }
 
-function ChartPanel({ weeks, chart }) {
-  if (!weeks?.length) return <div className="empty-panel"><h3>Data loading zone</h3><p>Once a season has data, NinerVision renders it here instantly from optimized local JSON.</p></div>;
-  if (chart === 'epa') return <ResponsiveContainer height={360}><LineChart data={weeks}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="week"/><YAxis/><Tooltip content={<TooltipBox/>}/><Line type="monotone" dataKey="off_epa" strokeWidth={3} dot={false}/><Line type="monotone" dataKey="pass_epa" strokeWidth={2} dot={false}/><Line type="monotone" dataKey="rush_epa" strokeWidth={2} dot={false}/><Line type="monotone" dataKey="def_epa_allowed" strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer>;
-  if (chart === 'success') return <ResponsiveContainer height={360}><AreaChart data={weeks}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="week"/><YAxis/><Tooltip content={<TooltipBox/>}/><Area type="monotone" dataKey="success_rate" strokeWidth={3}/></AreaChart></ResponsiveContainer>;
-  if (chart === 'explosive') return <ResponsiveContainer height={360}><BarChart data={weeks}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="week"/><YAxis/><Tooltip content={<TooltipBox/>}/><Bar dataKey="explosive_rate" radius={[10,10,0,0]}/><Bar dataKey="turnover_margin" radius={[10,10,0,0]}/></BarChart></ResponsiveContainer>;
-  if (chart === 'situational') return <ResponsiveContainer height={360}><LineChart data={weeks}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="week"/><YAxis/><Tooltip content={<TooltipBox/>}/><Line type="monotone" dataKey="third_down" strokeWidth={3}/><Line type="monotone" dataKey="red_zone" strokeWidth={3}/></LineChart></ResponsiveContainer>;
-  const avg = (k) => weeks.reduce((a,w)=>a+(w[k]||0),0)/weeks.length;
-  const radar = [{m:'EPA',v:Math.max(0, avg('off_epa')*180+50)},{m:'Success',v:avg('success_rate')},{m:'Explosive',v:avg('explosive_rate')*4},{m:'3rd Down',v:avg('third_down')},{m:'Red Zone',v:avg('red_zone')},{m:'Defense',v:Math.max(0,50-avg('def_epa_allowed')*180)}];
-  return <ResponsiveContainer height={360}><RadarChart data={radar}><PolarGrid/><PolarAngleAxis dataKey="m"/><PolarRadiusAxis/><Radar dataKey="v" fillOpacity={0.45}/><Tooltip/></RadarChart></ResponsiveContainer>;
-}
-
-function CommandCenter({ data }) {
-  const [chart, setChart] = useState('epa');
-  const weeks = data?.weeks || [];
-  const summary = useMemo(() => {
-    const avg = k => weeks.length ? weeks.reduce((a,w)=>a+(w[k]||0),0)/weeks.length : 0;
-    return { epa: avg('off_epa').toFixed(2), success: avg('success_rate').toFixed(1)+'%', explosive: avg('explosive_rate').toFixed(1)+'%', rz: avg('red_zone').toFixed(1)+'%' };
-  }, [weeks]);
-  return <section className="page-grid">
-    <div className="metrics-row">
-      <StatCard label="Off EPA/Play" value={summary.epa} detail="local nflverse-ready feed" icon={Activity}/>
-      <StatCard label="Success Rate" value={summary.success} detail="weekly efficiency" icon={Gauge}/>
-      <StatCard label="Explosive Rate" value={summary.explosive} detail="chunk-play profile" icon={Zap}/>
-      <StatCard label="Red Zone" value={summary.rz} detail="finishing drives" icon={Flame}/>
+function Header({ team }) {
+  return <header className="header">
+    <div>
+      <div className="eyebrow"><Flame size={13}/> NINERVISION COMMAND</div>
+      <h1>49ers Intelligence Center</h1>
+      <p>Advanced EPA, success rate, player usage, matchup and schedule analytics with real team/player assets.</p>
     </div>
-    <div className="main-chart panel">
-      <div className="panel-head"><div><p className="eyebrow">Visual Intelligence</p><h2>{chartOptions.find(c=>c.id===chart)?.label}</h2></div><button className="ghost"><Download size={16}/> Export</button></div>
-      <ChartPanel weeks={weeks} chart={chart}/>
-    </div>
-    <aside className="chart-menu panel">
-      <h3>Graph Library</h3>
-      {chartOptions.map(({id,label,desc,icon:Icon}) => <button key={id} className={chart===id?'active':''} onClick={()=>setChart(id)}><Icon size={18}/><div><b>{label}</b><span>{desc}</span></div><ChevronRight size={15}/></button>)}
-    </aside>
+    <div className="header-rank"><img src={team.logo} alt="49ers"/><div><small>Overall Profile</small><b>#{team.summary?.overall_rank || 5}</b><span>NFL efficiency index</span></div></div>
+  </header>;
+}
+
+function Filters({ chart, setChart }) {
+  return <section className="toolbar">
+    <label>Season<select><option>2025</option><option>2026 Preview</option></select></label>
+    <label>Graph Type<select value={chart} onChange={e => setChart(e.target.value)}>{chartOptions.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}</select></label>
+    <label>Lens<select><option>Team</option><option>Offense</option><option>Defense</option><option>Players</option></select></label>
+    <button className="export"><Download size={16}/> Export</button>
   </section>;
 }
 
-function PlayerLab({ roster, fallbackPlayers=[] }) {
-  const [query, setQuery] = useState('');
-  const source = roster.length ? roster : fallbackPlayers.map(p => ({ name:p.player, pos:p.position, photo:p.headshot }));
-  const players = source.filter(p => `${p.name} ${p.pos}`.toLowerCase().includes(query.toLowerCase())).slice(0, 36);
-  return <section className="panel full"><div className="panel-head"><div><p className="eyebrow">Real ESPN Headshots</p><h2>Player Lab</h2></div><label className="search"><Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search roster"/></label></div>
-    <div className="player-grid">{players.map(p => <motion.div whileHover={{ y:-4 }} className="player-card" key={`${p.id || p.name}`}><img src={p.photo} onError={(e)=>{e.currentTarget.src='/logos/sf.svg'}}/><div><b>{p.name}</b><span>#{p.number || '--'} · {p.pos}</span><small>{p.height} {p.weight}</small></div></motion.div>)}</div>
-  </section>;
+function ChartPanel({ chart, team }) {
+  const weekly = team.weekly || [];
+  const radar = [
+    { metric: 'EPA', value: 82 }, { metric: 'Success', value: 74 }, { metric: 'Explosive', value: 79 },
+    { metric: 'Red Zone', value: 84 }, { metric: '3rd Down', value: 76 }, { metric: 'Defense', value: 71 }
+  ];
+  let title = chartOptions.find(c => c.id === chart)?.label || 'EPA Trend';
+  let sub = chartOptions.find(c => c.id === chart)?.desc || '';
+  let body;
+  if (chart === 'radar') body = <ResponsiveContainer width="100%" height={330}><RadarChart data={radar}><PolarGrid stroke="rgba(255,255,255,.15)"/><PolarAngleAxis dataKey="metric" tick={{ fill: '#d8d8d8', fontSize: 12 }}/><PolarRadiusAxis tick={false} axisLine={false}/><Radar dataKey="value" stroke={colors.red} fill={colors.red} fillOpacity={0.45}/></RadarChart></ResponsiveContainer>;
+  else if (chart === 'success') body = <ResponsiveContainer width="100%" height={330}><AreaChart data={weekly}><defs><linearGradient id="successG" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={colors.red} stopOpacity={0.6}/><stop offset="95%" stopColor={colors.red} stopOpacity={0}/></linearGradient></defs><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Area dataKey="success_rate" stroke={colors.red} fill="url(#successG)" strokeWidth={3}/><Line dataKey="third_down" stroke={colors.gold} strokeWidth={2}/></AreaChart></ResponsiveContainer>;
+  else if (chart === 'explosive') body = <ResponsiveContainer width="100%" height={330}><BarChart data={team.explosives || []}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="type" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="rate" fill={colors.red} radius={[10,10,0,0]}/><Bar dataKey="epa" fill={colors.gold} radius={[10,10,0,0]}/></BarChart></ResponsiveContainer>;
+  else if (chart === 'situational') body = <ResponsiveContainer width="100%" height={330}><BarChart data={team.situational || []} layout="vertical"><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis type="number" stroke="#8d8d8d"/><YAxis type="category" dataKey="name" stroke="#d8d8d8" width={95}/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="value" fill={colors.gold} radius={[0,10,10,0]}/></BarChart></ResponsiveContainer>;
+  else if (chart === 'scoring') body = <ResponsiveContainer width="100%" height={330}><ComposedChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="points_for" fill={colors.red} radius={[8,8,0,0]}/><Bar dataKey="points_against" fill="rgba(255,255,255,.18)" radius={[8,8,0,0]}/><Line dataKey="wp_swing" stroke={colors.gold} strokeWidth={3}/></ComposedChart></ResponsiveContainer>;
+  else body = <ResponsiveContainer width="100%" height={330}><LineChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Line dataKey="off_epa" stroke={colors.red} strokeWidth={3} dot={false}/><Line dataKey="pass_epa" stroke={colors.gold} strokeWidth={2} dot={false}/><Line dataKey="rush_epa" stroke="#fff" strokeWidth={2} dot={false}/><Line dataKey="def_epa_allowed" stroke="#707070" strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer>;
+  return <section className="panel main-chart"><div className="panel-title"><div><h2>{title}</h2><p>{sub}</p></div><BarChart3/></div>{body}</section>;
 }
 
-function ScheduleCenter({ localSchedule, espnGames }) {
-  const games = espnGames.length ? espnGames : (localSchedule?.games || []);
-  return <section className="panel full schedule"><div className="panel-head"><div><p className="eyebrow">Schedule Intelligence</p><h2>2026 Schedule Center</h2><span className="muted">ESPN schedule feed first, local fallback if unavailable.</span></div></div>
-    <div className="schedule-grid">{games.map((g, i) => <motion.div whileHover={{ y:-4 }} className="game-card" key={`${g.week}-${g.opponent}-${i}`}><div className="game-week"><span>{g.week}</span><b>{g.date || 'TBD'}</b></div><div className="match"><img src={ESPN_49ERS_LOGO}/><strong>{g.homeAway === 'vs' ? 'VS' : '@'}</strong><img src={g.logo || ESPN_49ERS_LOGO}/></div><h3>{g.opponent}</h3><p>{g.venue || g.location || 'Venue TBD'}</p><div className="game-tags"><span>{g.status || g.type || 'Scheduled'}</span>{g.international && <span>International</span>}</div></motion.div>)}</div>
-  </section>;
+function GraphLibrary({ chart, setChart }) {
+  return <section className="panel graph-library"><h3>Graph Library</h3>{chartOptions.map(o => { const Icon = o.icon; return <button key={o.id} className={chart === o.id ? 'selected' : ''} onClick={() => setChart(o.id)}><Icon size={18}/><span><b>{o.label}</b><small>{o.desc}</small></span><ChevronRight size={16}/></button>})}</section>;
 }
 
-function VisualLab() {
-  return <section className="panel full"><p className="eyebrow">Coming Next</p><h2>Visual Lab</h2><div className="feature-grid"><div><Layers/><h3>EPA Play Maps</h3><p>Best/worst plays, momentum swings, and drive cards.</p></div><div><Sparkles/><h3>Share Graphics</h3><p>One-click social graphics for X, YouTube, and Instagram.</p></div><div><Shield/><h3>Matchup Engine</h3><p>49ers offense vs opponent defense edge finder.</p></div></div></section>;
+function PlayerCard({ player, live }) {
+  const match = live.find(p => p.name === player.name || p.id === player.id);
+  const photo = match?.photo || player.photo;
+  return <motion.article className="player-card" whileHover={{ y: -4 }}><div className="photo-wrap"><img src={photo} alt={player.name}/><span>{player.pos}</span></div><h3>{player.name}</h3><div className="player-stats">{player.stats.map(s => <div key={s.label}><span>{s.label}</span><b>{s.value}</b></div>)}</div><ResponsiveContainer width="100%" height={70}><LineChart data={player.trend}><Line dataKey="value" stroke={colors.gold} strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer></motion.article>;
 }
+
+function Command({ team, players, liveRoster, chart, setChart }) {
+  return <><Filters chart={chart} setChart={setChart}/><section className="kpi-grid">{(team.kpis||[]).map((k,i)=><StatCard key={k.label} kpi={k} index={i}/>)}</section><section className="grid"><ChartPanel chart={chart} team={team}/><GraphLibrary chart={chart} setChart={setChart}/></section><section className="grid two"><section className="panel"><h2>Team Leaders</h2><div className="leader-list">{(team.leaders||[]).map(l=><div key={l.stat}><span>{l.stat}</span><b>{l.player}</b><strong>{l.value}</strong></div>)}</div></section><section className="panel"><h2>Featured Player Lab</h2><div className="mini-players">{players.slice(0,3).map(p=><PlayerCard key={p.name} player={p} live={liveRoster}/>)}</div></section></section></>;
+}
+
+function PlayerLab({ players, liveRoster }) {
+  const [q, setQ] = useState('');
+  const filtered = players.filter(p => p.name.toLowerCase().includes(q.toLowerCase()) || p.pos.toLowerCase().includes(q.toLowerCase()));
+  return <><section className="toolbar"><label className="search"><Search size={16}/><input placeholder="Search player or position" value={q} onChange={e=>setQ(e.target.value)}/></label></section><section className="player-grid">{filtered.map(p=><PlayerCard key={p.name} player={p} live={liveRoster}/>)}</section></>;
+}
+
+function VisualLab({ team, chart, setChart }) {
+  return <><GraphLibrary chart={chart} setChart={setChart}/><ChartPanel chart={chart} team={team}/><section className="panel"><h2>Advanced Metrics Table</h2><table><thead><tr><th>Metric</th><th>Offense</th><th>Defense</th><th>Rank</th></tr></thead><tbody>{(team.advancedTable||[]).map(r=><tr key={r.metric}><td>{r.metric}</td><td>{r.offense}</td><td>{r.defense}</td><td>{r.rank}</td></tr>)}</tbody></table></section></>;
+}
+
+function Schedule({ schedule }) {
+  return <section className="schedule-grid">{schedule.map((g,i)=><article className="game-card" key={i}><div><img src={g.logo} alt={g.name}/><span>{g.type}</span></div><h3>{g.opponent} — {g.name}</h3><p>{g.site}</p><small>Week {g.week} · {g.note}</small></article>)}</section>;
+}
+
+function DataTable({ team }) { return <section className="panel"><h2>Weekly Data</h2><table><thead><tr>{['Week','Opp','Result','Off EPA','Pass EPA','Rush EPA','Success','Explosive','Red Zone','3rd Down'].map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{(team.weekly||[]).map(w=><tr key={w.week}><td>{w.week}</td><td>{w.opponent}</td><td className={w.result==='W'?'win':'loss'}>{w.result}</td><td>{w.off_epa}</td><td>{w.pass_epa}</td><td>{w.rush_epa}</td><td>{w.success_rate}%</td><td>{w.explosive_rate}%</td><td>{w.red_zone}%</td><td>{w.third_down}%</td></tr>)}</tbody></table></section> }
 
 function App() {
-  const [active, setActive] = useState('command');
-  const [season, setSeason] = useState(2025);
-  const data = useJson(`/data/metrics_${season}.json`);
-  const localSchedule = useJson('/data/schedule_2026.json');
-  const roster = useEspnRoster();
-  const espnGames = useEspnSchedule2026();
-  return <main className="app-shell">
-    <aside className="sidebar"><div className="brand"><img src={ESPN_49ERS_LOGO}/><div><b>NinerVision</b><span>Elite 49ers Intelligence</span></div></div>{navItems.map(({id,label,icon:Icon}) => <button className={active===id?'active':''} onClick={()=>setActive(id)} key={id}><Icon size={18}/>{label}</button>)}</aside>
-    <section className="content"><header className="topbar"><div><p className="eyebrow">Premium 49ers Analytics</p><h1>{active === 'command' ? 'Command Center' : navItems.find(n=>n.id===active)?.label}</h1></div><div className="filters"><select value={season} onChange={e=>setSeason(e.target.value)}><option value="2025">2025</option><option value="2026">2026</option></select><img src={ESPN_49ERS_LOGO}/></div></header>
-      {active === 'command' && <CommandCenter data={data}/>} 
-      {active === 'players' && <PlayerLab roster={roster} fallbackPlayers={data?.players || []}/>} 
-      {active === 'schedule' && <ScheduleCenter localSchedule={localSchedule} espnGames={espnGames}/>} 
-      {active === 'visuals' && <VisualLab/>}
-    </section>
-  </main>;
+  const team = useJson('/data/team.json', { logo:'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png', kpis:[], weekly:[] });
+  const players = useJson('/data/players.json', []);
+  const schedule = useJson('/data/schedule_2026.json', []);
+  const liveRoster = useEspnRoster();
+  const [page, setPage] = useState('command');
+  const [chart, setChart] = useState('epa');
+  return <div className="app"><TopNav page={page} setPage={setPage} team={team}/><main><Header team={team}/>{page==='command' && <Command team={team} players={players} liveRoster={liveRoster} chart={chart} setChart={setChart}/>} {page==='players' && <PlayerLab players={players} liveRoster={liveRoster}/>} {page==='charts' && <VisualLab team={team} chart={chart} setChart={setChart}/>} {page==='schedule' && <Schedule schedule={schedule}/>} {page==='data' && <DataTable team={team}/>}</main></div>;
 }
 
 createRoot(document.getElementById('root')).render(<App/>);

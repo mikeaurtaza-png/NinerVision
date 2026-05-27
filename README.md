@@ -1,26 +1,17 @@
-# 49ers Elite Analytics
+# NinerVision V3 Pro
 
-A free Vercel-ready React app for premium San Francisco 49ers analytics dashboards using saved nflverse-style data.
+Premium 49ers analytics dashboard built for free GitHub + Vercel deployment.
 
-## Run locally
-```bash
-npm install
-npm run dev
-```
+## Upload only these to GitHub
+- `src/`
+- `public/`
+- `package.json`
+- `index.html`
+- `vercel.json`
 
-## Deploy free on Vercel
-1. Push this folder to GitHub.
-2. Import the repo into Vercel.
-3. Framework preset: Vite.
-4. Build command: `npm run build`.
-5. Output directory: `dist`.
+Do not upload `node_modules` or `dist`.
 
-## Refresh real nflverse data later
-Run:
-```bash
-pip install -r scripts/requirements.txt
-python scripts/update_nflverse_data.py
-```
-Then commit the updated files in `public/data`.
-
-Sources: nflverse data is distributed through the nflverse/nflverse-data releases, and Python access is available through nflreadpy.
+## Data sources
+- nflverse-style local JSON for advanced stats
+- ESPN image URLs for team logo and player headshots
+- ESPN roster endpoint fallback for live headshot/photo updates

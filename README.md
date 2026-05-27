@@ -1,17 +1,31 @@
-# NinerVision V3 Pro
+# NinerVision V6 Elite
 
-Premium 49ers analytics dashboard built for free GitHub + Vercel deployment.
+Premium 49ers Intelligence web app for Vercel.
 
-## Upload only these to GitHub
+## Upload to GitHub
+Upload these:
 - `src/`
 - `public/`
-- `package.json`
+- `scripts/`
 - `index.html`
+- `package.json`
+- `vite.config.js`
 - `vercel.json`
+- `README.md`
 
 Do not upload `node_modules` or `dist`.
 
-## Data sources
-- nflverse-style local JSON for advanced stats
-- ESPN image URLs for team logo and player headshots
-- ESPN roster endpoint fallback for live headshot/photo updates
+## Run locally
+```bash
+npm install
+npm run build
+npm run dev
+```
+
+## Data
+The app includes demo fallback JSON so the UI builds. Run the pipeline script locally to replace demo files with real nflverse output.
+
+```bash
+pip install pandas nflreadpy
+python scripts/build_real_nflverse_data.py
+```

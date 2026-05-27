@@ -1,0 +1,100 @@
+[
+  {
+    "id": "purdy",
+    "name": "Brock Purdy",
+    "pos": "QB",
+    "status": "ACTIVE",
+    "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4361741.png",
+    "stats": {
+      "EPA/Dropback": "0.21",
+      "CPOE": "4.2%",
+      "Success": "49.6%",
+      "Air Yds/Att": "8.4"
+    },
+    "rank": "#5 QB"
+  },
+  {
+    "id": "mccaffrey",
+    "name": "Christian McCaffrey",
+    "pos": "RB",
+    "status": "ACTIVE",
+    "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/3117251.png",
+    "stats": {
+      "Rush EPA": "0.16",
+      "Success": "52.1%",
+      "Yards/Touch": "5.7",
+      "Target Share": "15.2%"
+    },
+    "rank": "#3 RB"
+  },
+  {
+    "id": "kittle",
+    "name": "George Kittle",
+    "pos": "TE",
+    "status": "ACTIVE",
+    "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/3040151.png",
+    "stats": {
+      "Target Share": "19.5%",
+      "Yards/Route": "2.31",
+      "YAC/Rec": "6.4",
+      "Success": "55.3%"
+    },
+    "rank": "#2 TE"
+  },
+  {
+    "id": "pearsall",
+    "name": "Ricky Pearsall",
+    "pos": "WR",
+    "status": "ACTIVE",
+    "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4683062.png",
+    "stats": {
+      "Target Share": "17.0%",
+      "Yards/Route": "1.96",
+      "Air Yards Share": "23.5%",
+      "Success": "50.1%"
+    },
+    "rank": "#22 WR"
+  },
+  {
+    "id": "jennings",
+    "name": "Jauan Jennings",
+    "pos": "WR",
+    "status": "ACTIVE",
+    "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4040715.png",
+    "stats": {
+      "Target Share": "18.8%",
+      "Yards/Route": "2.08",
+      "YAC/Rec": "5.3",
+      "Success": "51.0%"
+    },
+    "rank": "#18 WR"
+  },
+  {
+    "id": "bosa",
+    "name": "Nick Bosa",
+    "pos": "EDGE",
+    "status": "ACTIVE",
+    "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4040605.png",
+    "stats": {
+      "Pressure Rate": "17.8%",
+      "Sack Rate": "3.1%",
+      "Run Stops": "28",
+      "Impact": "Elite"
+    },
+    "rank": "#4 EDGE"
+  },
+  {
+    "id": "warner",
+    "name": "Fred Warner",
+    "pos": "LB",
+    "status": "ACTIVE",
+    "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/3138826.png",
+    "stats": {
+      "Stops": "62",
+      "Coverage EPA": "Top 10%",
+      "Run Fit": "Elite",
+      "Missed Tackle": "Low"
+    },
+    "rank": "#2 LB"
+  }
+]

@@ -1,0 +1,202 @@
+[
+  {
+    "name": "Geno Smith",
+    "team": "LV",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
+    "epa": 0.215,
+    "cpoe": 4.6,
+    "success": 0.418,
+    "pressure_epa": -0.006,
+    "rank": 1
+  },
+  {
+    "name": "Drake Maye",
+    "team": "NE",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ne.png",
+    "epa": 0.21,
+    "cpoe": 6.2,
+    "success": 0.412,
+    "pressure_epa": -0.007,
+    "rank": 2
+  },
+  {
+    "name": "Bryce Young",
+    "team": "CAR",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/car.png",
+    "epa": 0.197,
+    "cpoe": 3.2,
+    "success": 0.442,
+    "pressure_epa": -0.103,
+    "rank": 3
+  },
+  {
+    "name": "Lamar Jackson",
+    "team": "BAL",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/bal.png",
+    "epa": 0.191,
+    "cpoe": -1.8,
+    "success": 0.448,
+    "pressure_epa": 0.053,
+    "rank": 4
+  },
+  {
+    "name": "Matthew Stafford",
+    "team": "LAR",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lar.png",
+    "epa": 0.191,
+    "cpoe": -0.6,
+    "success": 0.438,
+    "pressure_epa": -0.006,
+    "rank": 5
+  },
+  {
+    "name": "Jalen Hurts",
+    "team": "PHI",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/phi.png",
+    "epa": 0.19,
+    "cpoe": 3.5,
+    "success": 0.522,
+    "pressure_epa": 0.014,
+    "rank": 6
+  },
+  {
+    "name": "Bo Nix",
+    "team": "DEN",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/den.png",
+    "epa": 0.186,
+    "cpoe": 0.0,
+    "success": 0.501,
+    "pressure_epa": 0.025,
+    "rank": 7
+  },
+  {
+    "name": "Jared Goff",
+    "team": "DET",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/det.png",
+    "epa": 0.183,
+    "cpoe": 2.7,
+    "success": 0.447,
+    "pressure_epa": -0.037,
+    "rank": 8
+  },
+  {
+    "name": "Tua Tagovailoa",
+    "team": "MIA",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
+    "epa": 0.177,
+    "cpoe": 1.5,
+    "success": 0.436,
+    "pressure_epa": 0.041,
+    "rank": 9
+  },
+  {
+    "name": "Baker Mayfield",
+    "team": "TB",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/tb.png",
+    "epa": 0.159,
+    "cpoe": -1.3,
+    "success": 0.506,
+    "pressure_epa": -0.009,
+    "rank": 10
+  },
+  {
+    "name": "Brock Purdy",
+    "team": "SF",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
+    "epa": 0.139,
+    "cpoe": 4.2,
+    "success": 0.496,
+    "pressure_epa": 0.02,
+    "rank": 11
+  },
+  {
+    "name": "Caleb Williams",
+    "team": "CHI",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
+    "epa": 0.139,
+    "cpoe": -3.0,
+    "success": 0.46,
+    "pressure_epa": 0.038,
+    "rank": 12
+  },
+  {
+    "name": "Joe Burrow",
+    "team": "CIN",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/cin.png",
+    "epa": 0.12,
+    "cpoe": 6.5,
+    "success": 0.502,
+    "pressure_epa": -0.06,
+    "rank": 13
+  },
+  {
+    "name": "Dak Prescott",
+    "team": "DAL",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/dal.png",
+    "epa": 0.077,
+    "cpoe": 1.8,
+    "success": 0.509,
+    "pressure_epa": -0.064,
+    "rank": 14
+  },
+  {
+    "name": "C.J. Stroud",
+    "team": "HOU",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/hou.png",
+    "epa": 0.052,
+    "cpoe": -0.0,
+    "success": 0.526,
+    "pressure_epa": 0.024,
+    "rank": 15
+  },
+  {
+    "name": "Trevor Lawrence",
+    "team": "JAX",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/jax.png",
+    "epa": 0.044,
+    "cpoe": 3.2,
+    "success": 0.501,
+    "pressure_epa": 0.059,
+    "rank": 16
+  },
+  {
+    "name": "Josh Allen",
+    "team": "BUF",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
+    "epa": 0.038,
+    "cpoe": 6.4,
+    "success": 0.511,
+    "pressure_epa": -0.022,
+    "rank": 17
+  },
+  {
+    "name": "Patrick Mahomes",
+    "team": "KC",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
+    "epa": -0.008,
+    "cpoe": -0.7,
+    "success": 0.471,
+    "pressure_epa": 0.056,
+    "rank": 18
+  },
+  {
+    "name": "Justin Herbert",
+    "team": "LAC",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lac.png",
+    "epa": -0.043,
+    "cpoe": 5.1,
+    "success": 0.436,
+    "pressure_epa": -0.06,
+    "rank": 19
+  },
+  {
+    "name": "Jordan Love",
+    "team": "GB",
+    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/gb.png",
+    "epa": -0.058,
+    "cpoe": 4.1,
+    "success": 0.435,
+    "pressure_epa": -0.039,
+    "rank": 20
+  }
+]

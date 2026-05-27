@@ -1,154 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import {
-  Area, AreaChart, Bar, BarChart, CartesianGrid, ComposedChart, Line, LineChart,
-  ResponsiveContainer, Radar, RadarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis,
-  Tooltip, XAxis, YAxis
-} from 'recharts';
-import {
-  Activity, BarChart3, CalendarDays, ChevronRight, Download, Gauge, Home, Layers,
-  LineChart as LineIcon, Search, Shield, Sparkles, Trophy, Users, Zap, Target, Swords,
-  TrendingUp, Flame, Eye, Table2
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import './styles.css';
-
-const pages = [
-  { id: 'command', label: 'Command Center', icon: Home },
-  { id: 'players', label: 'Player Lab', icon: Users },
-  { id: 'charts', label: 'Visual Lab', icon: LineIcon },
-  { id: 'schedule', label: '2026 Schedule', icon: CalendarDays },
-  { id: 'data', label: 'Data Table', icon: Table2 },
-];
-
-const chartOptions = [
-  { id: 'epa', label: 'EPA Trend', desc: 'Offense, pass, rush, and defensive EPA', icon: Activity },
-  { id: 'success', label: 'Success Rate', desc: 'Weekly consistency and efficiency', icon: Gauge },
-  { id: 'explosive', label: 'Explosive Profile', desc: 'Chunk plays, YAC and play-action', icon: Zap },
-  { id: 'situational', label: 'Situational Football', desc: '3rd down, red zone, goal-to-go', icon: Shield },
-  { id: 'scoring', label: 'Game Flow', desc: 'Points, EPA and win-probability swings', icon: TrendingUp },
-  { id: 'radar', label: 'Team Radar', desc: 'Premium all-around team profile', icon: Sparkles },
-];
-
-const colors = { red: '#c31828', gold: '#b3995d', white: '#ffffff', gray: '#9da0a6', dark: '#090909' };
-
-function useJson(path, fallback) {
-  const [data, setData] = useState(fallback);
-  useEffect(() => { fetch(path).then(r => r.json()).then(setData).catch(() => setData(fallback)); }, [path]);
-  return data;
-}
-
-function useEspnRoster() {
-  const [live, setLive] = useState([]);
-  useEffect(() => {
-    fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/sf/roster')
-      .then(r => r.json())
-      .then(json => {
-        const groups = json.athletes || [];
-        const flat = groups.flatMap(group => (group.items || []).map(a => ({
-          id: a.id, name: a.displayName || a.fullName, pos: a.position?.abbreviation || '', number: a.jersey || '',
-          photo: a.headshot?.href || `https://a.espncdn.com/i/headshots/nfl/players/full/${a.id}.png`
-        })));
-        setLive(flat);
-      })
-      .catch(() => setLive([]));
-  }, []);
-  return live;
-}
-
-function StatCard({ kpi, index }) {
-  return <motion.div className="stat-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * .04 }}>
-    <div className="stat-label">{kpi.label}</div>
-    <div className="stat-value">{kpi.value}</div>
-    <div className="stat-foot"><span>{kpi.rank}</span><b>{kpi.trend}</b></div>
-  </motion.div>;
-}
-
-function TopNav({ page, setPage, team }) {
-  return <aside className="sidebar">
-    <div className="brand"><div><span>NINER</span><b>VISION</b></div><small>Elite 49ers Intelligence</small></div>
-    <img className="team-logo-xl" src={team.logo} alt="49ers logo" />
-    <nav>{pages.map(item => { const Icon = item.icon; return <button key={item.id} onClick={() => setPage(item.id)} className={page === item.id ? 'active' : ''}><Icon size={18} />{item.label}</button>; })}</nav>
-    <div className="side-card"><small>Data Stack</small><b>nflverse + ESPN</b><p>Local JSON first. Live assets second. Built for fast Vercel deployment.</p></div>
-  </aside>;
-}
-
-function Header({ team }) {
-  return <header className="header">
-    <div>
-      <div className="eyebrow"><Flame size={13}/> NINERVISION COMMAND</div>
-      <h1>49ers Intelligence Center</h1>
-      <p>Advanced EPA, success rate, player usage, matchup and schedule analytics with real team/player assets.</p>
-    </div>
-    <div className="header-rank"><img src={team.logo} alt="49ers"/><div><small>Overall Profile</small><b>#{team.summary?.overall_rank || 5}</b><span>NFL efficiency index</span></div></div>
-  </header>;
-}
-
-function Filters({ chart, setChart }) {
-  return <section className="toolbar">
-    <label>Season<select><option>2025</option><option>2026 Preview</option></select></label>
-    <label>Graph Type<select value={chart} onChange={e => setChart(e.target.value)}>{chartOptions.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}</select></label>
-    <label>Lens<select><option>Team</option><option>Offense</option><option>Defense</option><option>Players</option></select></label>
-    <button className="export"><Download size={16}/> Export</button>
-  </section>;
-}
-
-function ChartPanel({ chart, team }) {
-  const weekly = team.weekly || [];
-  const radar = [
-    { metric: 'EPA', value: 82 }, { metric: 'Success', value: 74 }, { metric: 'Explosive', value: 79 },
-    { metric: 'Red Zone', value: 84 }, { metric: '3rd Down', value: 76 }, { metric: 'Defense', value: 71 }
-  ];
-  let title = chartOptions.find(c => c.id === chart)?.label || 'EPA Trend';
-  let sub = chartOptions.find(c => c.id === chart)?.desc || '';
-  let body;
-  if (chart === 'radar') body = <ResponsiveContainer width="100%" height={330}><RadarChart data={radar}><PolarGrid stroke="rgba(255,255,255,.15)"/><PolarAngleAxis dataKey="metric" tick={{ fill: '#d8d8d8', fontSize: 12 }}/><PolarRadiusAxis tick={false} axisLine={false}/><Radar dataKey="value" stroke={colors.red} fill={colors.red} fillOpacity={0.45}/></RadarChart></ResponsiveContainer>;
-  else if (chart === 'success') body = <ResponsiveContainer width="100%" height={330}><AreaChart data={weekly}><defs><linearGradient id="successG" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={colors.red} stopOpacity={0.6}/><stop offset="95%" stopColor={colors.red} stopOpacity={0}/></linearGradient></defs><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Area dataKey="success_rate" stroke={colors.red} fill="url(#successG)" strokeWidth={3}/><Line dataKey="third_down" stroke={colors.gold} strokeWidth={2}/></AreaChart></ResponsiveContainer>;
-  else if (chart === 'explosive') body = <ResponsiveContainer width="100%" height={330}><BarChart data={team.explosives || []}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="type" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="rate" fill={colors.red} radius={[10,10,0,0]}/><Bar dataKey="epa" fill={colors.gold} radius={[10,10,0,0]}/></BarChart></ResponsiveContainer>;
-  else if (chart === 'situational') body = <ResponsiveContainer width="100%" height={330}><BarChart data={team.situational || []} layout="vertical"><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis type="number" stroke="#8d8d8d"/><YAxis type="category" dataKey="name" stroke="#d8d8d8" width={95}/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="value" fill={colors.gold} radius={[0,10,10,0]}/></BarChart></ResponsiveContainer>;
-  else if (chart === 'scoring') body = <ResponsiveContainer width="100%" height={330}><ComposedChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="points_for" fill={colors.red} radius={[8,8,0,0]}/><Bar dataKey="points_against" fill="rgba(255,255,255,.18)" radius={[8,8,0,0]}/><Line dataKey="wp_swing" stroke={colors.gold} strokeWidth={3}/></ComposedChart></ResponsiveContainer>;
-  else body = <ResponsiveContainer width="100%" height={330}><LineChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Line dataKey="off_epa" stroke={colors.red} strokeWidth={3} dot={false}/><Line dataKey="pass_epa" stroke={colors.gold} strokeWidth={2} dot={false}/><Line dataKey="rush_epa" stroke="#fff" strokeWidth={2} dot={false}/><Line dataKey="def_epa_allowed" stroke="#707070" strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer>;
-  return <section className="panel main-chart"><div className="panel-title"><div><h2>{title}</h2><p>{sub}</p></div><BarChart3/></div>{body}</section>;
-}
-
-function GraphLibrary({ chart, setChart }) {
-  return <section className="panel graph-library"><h3>Graph Library</h3>{chartOptions.map(o => { const Icon = o.icon; return <button key={o.id} className={chart === o.id ? 'selected' : ''} onClick={() => setChart(o.id)}><Icon size={18}/><span><b>{o.label}</b><small>{o.desc}</small></span><ChevronRight size={16}/></button>})}</section>;
-}
-
-function PlayerCard({ player, live }) {
-  const match = live.find(p => p.name === player.name || p.id === player.id);
-  const photo = match?.photo || player.photo;
-  return <motion.article className="player-card" whileHover={{ y: -4 }}><div className="photo-wrap"><img src={photo} alt={player.name}/><span>{player.pos}</span></div><h3>{player.name}</h3><div className="player-stats">{player.stats.map(s => <div key={s.label}><span>{s.label}</span><b>{s.value}</b></div>)}</div><ResponsiveContainer width="100%" height={70}><LineChart data={player.trend}><Line dataKey="value" stroke={colors.gold} strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer></motion.article>;
-}
-
-function Command({ team, players, liveRoster, chart, setChart }) {
-  return <><Filters chart={chart} setChart={setChart}/><section className="kpi-grid">{(team.kpis||[]).map((k,i)=><StatCard key={k.label} kpi={k} index={i}/>)}</section><section className="grid"><ChartPanel chart={chart} team={team}/><GraphLibrary chart={chart} setChart={setChart}/></section><section className="grid two"><section className="panel"><h2>Team Leaders</h2><div className="leader-list">{(team.leaders||[]).map(l=><div key={l.stat}><span>{l.stat}</span><b>{l.player}</b><strong>{l.value}</strong></div>)}</div></section><section className="panel"><h2>Featured Player Lab</h2><div className="mini-players">{players.slice(0,3).map(p=><PlayerCard key={p.name} player={p} live={liveRoster}/>)}</div></section></section></>;
-}
-
-function PlayerLab({ players, liveRoster }) {
-  const [q, setQ] = useState('');
-  const filtered = players.filter(p => p.name.toLowerCase().includes(q.toLowerCase()) || p.pos.toLowerCase().includes(q.toLowerCase()));
-  return <><section className="toolbar"><label className="search"><Search size={16}/><input placeholder="Search player or position" value={q} onChange={e=>setQ(e.target.value)}/></label></section><section className="player-grid">{filtered.map(p=><PlayerCard key={p.name} player={p} live={liveRoster}/>)}</section></>;
-}
-
-function VisualLab({ team, chart, setChart }) {
-  return <><GraphLibrary chart={chart} setChart={setChart}/><ChartPanel chart={chart} team={team}/><section className="panel"><h2>Advanced Metrics Table</h2><table><thead><tr><th>Metric</th><th>Offense</th><th>Defense</th><th>Rank</th></tr></thead><tbody>{(team.advancedTable||[]).map(r=><tr key={r.metric}><td>{r.metric}</td><td>{r.offense}</td><td>{r.defense}</td><td>{r.rank}</td></tr>)}</tbody></table></section></>;
-}
-
-function Schedule({ schedule }) {
-  return <section className="schedule-grid">{schedule.map((g,i)=><article className="game-card" key={i}><div><img src={g.logo} alt={g.name}/><span>{g.type}</span></div><h3>{g.opponent} — {g.name}</h3><p>{g.site}</p><small>Week {g.week} · {g.note}</small></article>)}</section>;
-}
-
-function DataTable({ team }) { return <section className="panel"><h2>Weekly Data</h2><table><thead><tr>{['Week','Opp','Result','Off EPA','Pass EPA','Rush EPA','Success','Explosive','Red Zone','3rd Down'].map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{(team.weekly||[]).map(w=><tr key={w.week}><td>{w.week}</td><td>{w.opponent}</td><td className={w.result==='W'?'win':'loss'}>{w.result}</td><td>{w.off_epa}</td><td>{w.pass_epa}</td><td>{w.rush_epa}</td><td>{w.success_rate}%</td><td>{w.explosive_rate}%</td><td>{w.red_zone}%</td><td>{w.third_down}%</td></tr>)}</tbody></table></section> }
-
-function App() {
-  const team = useJson('/data/team.json', { logo:'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png', kpis:[], weekly:[] });
-  const players = useJson('/data/players.json', []);
-  const schedule = useJson('/data/schedule_2026.json', []);
-  const liveRoster = useEspnRoster();
-  const [page, setPage] = useState('command');
-  const [chart, setChart] = useState('epa');
-  return <div className="app"><TopNav page={page} setPage={setPage} team={team}/><main><Header team={team}/>{page==='command' && <Command team={team} players={players} liveRoster={liveRoster} chart={chart} setChart={setChart}/>} {page==='players' && <PlayerLab players={players} liveRoster={liveRoster}/>} {page==='charts' && <VisualLab team={team} chart={chart} setChart={setChart}/>} {page==='schedule' && <Schedule schedule={schedule}/>} {page==='data' && <DataTable team={team}/>}</main></div>;
-}
-
+import React,{useEffect,useMemo,useState}from'react';import{createRoot}from'react-dom/client';import{Area,AreaChart,Bar,BarChart,CartesianGrid,ComposedChart,Line,LineChart,ResponsiveContainer,Radar,RadarChart,PolarAngleAxis,PolarGrid,PolarRadiusAxis,Tooltip,XAxis,YAxis,ScatterChart,Scatter,ReferenceLine,Cell}from'recharts';import{Activity,BarChart3,CalendarDays,ChevronRight,Download,Gauge,Home,LineChart as LineIcon,Search,Shield,Sparkles,Users,Zap,TrendingUp,Flame,Table2,Globe2,UserRound,Target,Medal}from'lucide-react';import{motion}from'framer-motion';import'./styles.css';
+const pages=[['command','Command Center',Home],['league','NFL Compare',Globe2],['qbs','QB Lab',UserRound],['players','Player Lab',Users],['charts','Visual Lab',LineIcon],['schedule','2026 Schedule',CalendarDays],['data','Data Table',Table2]];
+const chartOptions=[['epa','EPA Trend','Offense, pass, rush, defense',Activity],['success','Success Rate','Weekly consistency',Gauge],['explosive','Explosive Profile','Chunk plays and YAC',Zap],['situational','Situational Football','3rd down, red zone, goal-to-go',Shield],['scoring','Game Flow','Points and WP swings',TrendingUp],['radar','Team Radar','All-around profile',Sparkles]];
+const leagueMetrics=[['overall','NinerVision Index','Higher is better'],['off_epa','Off EPA/play','Offensive efficiency'],['def_epa_allowed','Def EPA Allowed','Lower is better'],['success_rate','Success Rate','Consistency'],['explosive_rate','Explosive Rate','Chunk plays'],['pressure_rate','Pressure Rate','Defensive disruption'],['red_zone','Red Zone TD%','Finishing drives'],['third_down','3rd Down%','Conversion rate']];
+const qbMetrics=[['composite','QB Composite','NinerVision QB score'],['epa_db','EPA/dropback','Efficiency'],['cpoe','CPOE','Accuracy over expected'],['success_rate','Success Rate','Down-to-down efficiency'],['aypa','Air yards/att','Aggressiveness'],['pressure_epa','Pressure EPA','Under pressure'],['red_zone_epa','Red-zone EPA','Scoring area'],['sack_rate','Sack Rate','Lower is better']];
+const C={red:'#c31828',gold:'#b3995d',white:'#fff',muted:'#9da0a6'};function useJson(path,fallback){const[d,setD]=useState(fallback);useEffect(()=>{fetch(path).then(r=>r.json()).then(setD).catch(()=>setD(fallback))},[path]);return d}function rankSuffix(n){return n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`}function RankPill({rank,pct}){return <span className="rank-pill">#{rank}/32 · {pct}th pct</span>}function useEspnRoster(){const[l,setL]=useState([]);useEffect(()=>{fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/sf/roster').then(r=>r.json()).then(j=>{const flat=(j.athletes||[]).flatMap(g=>(g.items||[]).map(a=>({id:a.id,name:a.displayName||a.fullName,pos:a.position?.abbreviation||'',number:a.jersey||'',photo:a.headshot?.href||`https://a.espncdn.com/i/headshots/nfl/players/full/${a.id}.png`})));setL(flat)}).catch(()=>setL([]))},[]);return l}
+function Sidebar({page,setPage,team}){return <aside className="sidebar"><div className="brand"><div><span>NINER</span><b>VISION</b></div><small>Elite Football Intelligence</small></div><img className="team-logo-xl" src={team.logo} /><nav>{pages.map(([id,label,Icon])=><button key={id} onClick={()=>setPage(id)} className={page===id?'active':''}><Icon size={18}/>{label}</button>)}</nav><div className="side-card"><small>V4 Upgrade</small><b>League + QB Context</b><p>Every major metric now has rank context, 32-team plots, and comparison views.</p></div></aside>}
+function Header({team}){return <header className="header"><div><div className="eyebrow"><Flame size={13}/> NINERVISION COMMAND</div><h1>49ers Intelligence Center</h1><p>Premium, fast, league-context analytics: rankings, percentiles, player comparison, and advanced football visuals.</p></div><div className="header-rank"><img src={team.logo}/><div><small>Overall Profile</small><b>#{team.summary?.overall_rank||5}</b><span>NFL efficiency index</span></div></div></header>}
+function StatCard({kpi,index}){return <motion.div className="stat-card" initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{delay:index*.04}}><div className="stat-label">{kpi.label}</div><div className="stat-value">{kpi.value}</div><div className="stat-foot"><span>{kpi.rank}</span><b>{kpi.trend}</b></div></motion.div>}
+function Filters({chart,setChart}){return <section className="toolbar"><label>Season<select><option>2025</option><option>2026 Preview</option></select></label><label>Graph Type<select value={chart}onChange={e=>setChart(e.target.value)}>{chartOptions.map(([id,l])=><option key={id} value={id}>{l}</option>)}</select></label><label>Lens<select><option>Team</option><option>Offense</option><option>Defense</option><option>Players</option></select></label><button className="export"><Download size={16}/> Export</button></section>}
+function ChartPanel({chart,team}){const weekly=team.weekly||[];const radar=[['EPA',82],['Success',74],['Explosive',79],['Red Zone',84],['3rd Down',76],['Defense',71]].map(([metric,value])=>({metric,value}));const opt=chartOptions.find(([id])=>id===chart)||chartOptions[0];let body;if(chart==='radar')body=<ResponsiveContainer width="100%" height={330}><RadarChart data={radar}><PolarGrid stroke="rgba(255,255,255,.15)"/><PolarAngleAxis dataKey="metric" tick={{fill:'#d8d8d8',fontSize:12}}/><PolarRadiusAxis tick={false} axisLine={false}/><Radar dataKey="value" stroke={C.red} fill={C.red} fillOpacity={.45}/></RadarChart></ResponsiveContainer>;else if(chart==='success')body=<ResponsiveContainer width="100%" height={330}><AreaChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Area dataKey="success_rate" stroke={C.red} fill={C.red} fillOpacity={.18} strokeWidth={3}/><Line dataKey="third_down" stroke={C.gold} strokeWidth={2}/></AreaChart></ResponsiveContainer>;else if(chart==='explosive')body=<ResponsiveContainer width="100%" height={330}><BarChart data={team.explosives||[]}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="type" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="rate" fill={C.red} radius={[10,10,0,0]}/><Bar dataKey="epa" fill={C.gold} radius={[10,10,0,0]}/></BarChart></ResponsiveContainer>;else if(chart==='situational')body=<ResponsiveContainer width="100%" height={330}><BarChart data={team.situational||[]} layout="vertical"><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis type="number" stroke="#8d8d8d"/><YAxis type="category" dataKey="name" stroke="#d8d8d8" width={95}/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="value" fill={C.gold} radius={[0,10,10,0]}/></BarChart></ResponsiveContainer>;else if(chart==='scoring')body=<ResponsiveContainer width="100%" height={330}><ComposedChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="points_for" fill={C.red} radius={[8,8,0,0]}/><Bar dataKey="points_against" fill="rgba(255,255,255,.18)" radius={[8,8,0,0]}/><Line dataKey="wp_swing" stroke={C.gold} strokeWidth={3}/></ComposedChart></ResponsiveContainer>;else body=<ResponsiveContainer width="100%" height={330}><LineChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Line dataKey="off_epa" stroke={C.red} strokeWidth={3} dot={false}/><Line dataKey="pass_epa" stroke={C.gold} strokeWidth={2} dot={false}/><Line dataKey="rush_epa" stroke="#fff" strokeWidth={2} dot={false}/><Line dataKey="def_epa_allowed" stroke="#707070" strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer>;return <section className="panel main-chart"><div className="panel-title"><div><h2>{opt[1]}</h2><p>{opt[2]}</p></div><BarChart3/></div>{body}</section>}
+function GraphLibrary({chart,setChart}){return <section className="panel graph-library"><h3>Graph Library</h3>{chartOptions.map(([id,l,d,Icon])=><button key={id} className={chart===id?'selected':''} onClick={()=>setChart(id)}><Icon size={18}/><span><b>{l}</b><small>{d}</small></span><ChevronRight size={16}/></button>)}</section>}
+function RankStrip({team}){return <section className="rank-strip">{(team.leagueRanks||[]).map(r=><div key={r.metric}><span>{r.metric}</span><b>{r.value}</b><RankPill rank={r.rank} pct={r.pct}/></div>)}</section>}
+function Command({team,players,liveRoster,chart,setChart}){return <><Filters chart={chart} setChart={setChart}/><section className="kpi-grid">{(team.kpis||[]).map((k,i)=><StatCard key={k.label} kpi={k} index={i}/>)}</section><RankStrip team={team}/><section className="grid"><ChartPanel chart={chart} team={team}/><GraphLibrary chart={chart} setChart={setChart}/></section><section className="grid two"><section className="panel"><h2>Team Leaders</h2><div className="leader-list">{(team.leaders||[]).map(l=><div key={l.stat}><span>{l.stat}</span><b>{l.player}</b><strong>{l.value}</strong></div>)}</div></section><section className="panel"><h2>What NinerVision Should Surface</h2><div className="insight-list"><p><b>Rank every metric:</b> never show a number without NFL context.</p><p><b>Highlight deltas:</b> week-over-week change and league-average gap.</p><p><b>Make it shareable:</b> every chart should have a headline insight.</p></div></section></section></>}
+function LeagueLab({league}){const[metric,setMetric]=useState('overall');const row=leagueMetrics.find(([m])=>m===metric)||leagueMetrics[0];const sorted=[...league].sort((a,b)=> metric==='def_epa_allowed'?a[metric]-b[metric]:b[metric]-a[metric]);const sf=league.find(t=>t.team==='SF')||{};return <><section className="toolbar"><label>Metric<select value={metric} onChange={e=>setMetric(e.target.value)}>{leagueMetrics.map(([m,l])=><option value={m} key={m}>{l}</option>)}</select></label><div className="context-note"><Medal size={16}/> 49ers rank {sf[metric+'_rank']?rankSuffix(sf[metric+'_rank']):'--'} of 32</div></section><section className="grid"><section className="panel main-chart"><div className="panel-title"><div><h2>32-Team {row[1]}</h2><p>{row[2]} · SF is highlighted in red/gold.</p></div><RankPill rank={sf[metric+'_rank']} pct={sf[metric+'_pct']}/></div><ResponsiveContainer width="100%" height={390}><BarChart data={sorted.slice(0,32)}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="team" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey={metric} radius={[8,8,0,0]}>{sorted.map(t=><Cell key={t.team} fill={t.team==='SF'?C.red:'rgba(255,255,255,.22)'}/>)}</Bar></BarChart></ResponsiveContainer></section><section className="panel"><h2>Offense / Defense Quadrant</h2><ResponsiveContainer width="100%" height={390}><ScatterChart><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="off_epa" name="Off EPA" stroke="#8d8d8d"/><YAxis dataKey="def_epa_allowed" name="Def EPA Allowed" stroke="#8d8d8d"/><ReferenceLine x={0} stroke="rgba(255,255,255,.25)"/><ReferenceLine y={0} stroke="rgba(255,255,255,.25)"/><Tooltip cursor={{strokeDasharray:'3 3'}} contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Scatter data={league}>{league.map(t=><Cell key={t.team} fill={t.team==='SF'?C.gold:'rgba(255,255,255,.35)'}/>)}</Scatter></ScatterChart></ResponsiveContainer></section></section><section className="panel"><h2>NFL Rankings Table</h2><table><thead><tr><th>Rank</th><th>Team</th><th>{row[1]}</th><th>Percentile</th><th>Off EPA</th><th>Def EPA Allowed</th></tr></thead><tbody>{sorted.map((t,i)=><tr key={t.team} className={t.team==='SF'?'sf-row':''}><td>{i+1}</td><td><img className="tiny-logo" src={t.logo}/>{t.name}</td><td>{t[metric]}</td><td>{t[metric+'_pct']}%</td><td>{t.off_epa}</td><td>{t.def_epa_allowed}</td></tr>)}</tbody></table></section></>}
+function QBLab({qbs}){const[metric,setMetric]=useState('composite');const[query,setQuery]=useState('');const sorted=[...qbs].sort((a,b)=> metric==='sack_rate'?a[metric]-b[metric]:b[metric]-a[metric]);const purdy=qbs.find(q=>q.name==='Brock Purdy')||{};const filtered=sorted.filter(q=>q.name.toLowerCase().includes(query.toLowerCase())||q.team.toLowerCase().includes(query.toLowerCase()));return <><section className="toolbar"><label>QB Metric<select value={metric} onChange={e=>setMetric(e.target.value)}>{qbMetrics.map(([m,l])=><option key={m} value={m}>{l}</option>)}</select></label><label className="search"><Search size={16}/><input placeholder="Search QB/team" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="context-note"><Target size={16}/> Purdy: #{purdy[metric+'_rank']}/32</div></section><section className="grid"><section className="panel main-chart"><div className="panel-title"><div><h2>Brock Purdy vs Starting QBs</h2><p>Rank every QB stat against the 2025 starter set.</p></div><RankPill rank={purdy[metric+'_rank']} pct={purdy[metric+'_pct']}/></div><ResponsiveContainer width="100%" height={390}><ScatterChart><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="epa_db" name="EPA/dropback" stroke="#8d8d8d"/><YAxis dataKey="cpoe" name="CPOE" stroke="#8d8d8d"/><ReferenceLine x={0} stroke="rgba(255,255,255,.25)"/><ReferenceLine y={0} stroke="rgba(255,255,255,.25)"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Scatter data={qbs}>{qbs.map(q=><Cell key={q.name} fill={q.name==='Brock Purdy'?C.gold:'rgba(255,255,255,.35)'}/>)}</Scatter></ScatterChart></ResponsiveContainer></section><section className="panel"><h2>QB Metric Ranking</h2><div className="qb-list">{filtered.slice(0,12).map((q,i)=><div className={q.name==='Brock Purdy'?'qb-row purdy':'qb-row'} key={q.name}><img src={q.headshot}/><span><b>{i+1}. {q.name}</b><small>{q.team}</small></span><strong>{q[metric]}</strong></div>)}</div></section></section><section className="qb-grid">{filtered.slice(0,8).map(q=><article className={q.name==='Brock Purdy'?'qb-card purdy-card':'qb-card'} key={q.name}><img src={q.headshot}/><h3>{q.name}</h3><small>{q.team}</small><div><span>EPA/dropback</span><b>{q.epa_db}</b><RankPill rank={q.epa_db_rank} pct={q.epa_db_pct}/></div><div><span>CPOE</span><b>{q.cpoe}</b><RankPill rank={q.cpoe_rank} pct={q.cpoe_pct}/></div></article>)}</section></>}
+function PlayerCard({player,live}){const m=live.find(p=>p.name===player.name||p.id===player.id);const photo=m?.photo||player.photo;return <motion.article className="player-card" whileHover={{y:-4}}><div className="photo-wrap"><img src={photo}/><span>{player.pos}</span></div><h3>{player.name}</h3><div className="player-stats">{player.stats.map(s=><div key={s.label}><span>{s.label}</span><b>{s.value}</b></div>)}</div><ResponsiveContainer width="100%" height={70}><LineChart data={player.trend}><Line dataKey="value" stroke={C.gold} strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer></motion.article>}
+function PlayerLab({players,liveRoster}){const[q,setQ]=useState('');const f=players.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.pos.toLowerCase().includes(q.toLowerCase()));return <><section className="toolbar"><label className="search"><Search size={16}/><input placeholder="Search player or position" value={q} onChange={e=>setQ(e.target.value)}/></label></section><section className="player-grid">{f.map(p=><PlayerCard key={p.name} player={p} live={liveRoster}/>)}</section></>}
+function VisualLab({team,chart,setChart}){return <><GraphLibrary chart={chart} setChart={setChart}/><ChartPanel chart={chart} team={team}/><section className="panel"><h2>Advanced Metrics Table</h2><table><thead><tr><th>Metric</th><th>Offense</th><th>Defense</th><th>Rank</th></tr></thead><tbody>{(team.advancedTable||[]).map(r=><tr key={r.metric}><td>{r.metric}</td><td>{r.offense}</td><td>{r.defense}</td><td>{r.rank}</td></tr>)}</tbody></table></section></>}
+function Schedule({schedule}){return <section className="schedule-grid">{schedule.map((g,i)=><article className="game-card" key={i}><div><img src={g.logo}/><span>{g.type}</span></div><h3>{g.opponent} — {g.name}</h3><p>{g.site}</p><small>Week {g.week} · {g.note}</small></article>)}</section>}
+function DataTable({team}){return <section className="panel"><h2>Weekly Data</h2><table><thead><tr>{['Week','Opp','Result','Off EPA','Pass EPA','Rush EPA','Success','Explosive','Red Zone','3rd Down'].map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{(team.weekly||[]).map(w=><tr key={w.week}><td>{w.week}</td><td>{w.opponent}</td><td className={w.result==='W'?'win':'loss'}>{w.result}</td><td>{w.off_epa}</td><td>{w.pass_epa}</td><td>{w.rush_epa}</td><td>{w.success_rate}%</td><td>{w.explosive_rate}%</td><td>{w.red_zone}%</td><td>{w.third_down}%</td></tr>)}</tbody></table></section>}
+function App(){const team=useJson('/data/team.json',{logo:'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png',kpis:[],weekly:[]});const players=useJson('/data/players.json',[]);const schedule=useJson('/data/schedule_2026.json',[]);const league=useJson('/data/league_teams_2025.json',[]);const qbs=useJson('/data/qbs_2025.json',[]);const liveRoster=useEspnRoster();const[page,setPage]=useState('command');const[chart,setChart]=useState('epa');return <div className="app"><Sidebar page={page} setPage={setPage} team={team}/><main><Header team={team}/>{page==='command'&&<Command team={team} players={players} liveRoster={liveRoster} chart={chart} setChart={setChart}/>} {page==='league'&&<LeagueLab league={league}/>} {page==='qbs'&&<QBLab qbs={qbs}/>} {page==='players'&&<PlayerLab players={players} liveRoster={liveRoster}/>} {page==='charts'&&<VisualLab team={team} chart={chart} setChart={setChart}/>} {page==='schedule'&&<Schedule schedule={schedule}/>} {page==='data'&&<DataTable team={team}/>}</main></div>}
 createRoot(document.getElementById('root')).render(<App/>);

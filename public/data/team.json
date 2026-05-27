@@ -1,19 +1,344 @@
 {
-  "team":"SF","name":"San Francisco 49ers","brand":"NinerVision","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/sf.png","wordmark":"https://a.espncdn.com/i/teamlogos/nfl/500-dark/sf.png","primary":"#AA0000","gold":"#B3995D","dark":"#070707",
-  "summary":{"record":"0-0","overall_rank":5,"off_epa_rank":4,"def_epa_rank":9,"success_rank":7,"explosive_rank":5,"red_zone_rank":3},
-  "kpis":[{"label":"Off EPA / Play","value":"0.12","rank":"#4 NFL","trend":"+8.4%"},{"label":"Success Rate","value":"46.3%","rank":"#7 NFL","trend":"+2.1%"},{"label":"Explosive Rate","value":"11.5%","rank":"#5 NFL","trend":"+1.8%"},{"label":"Red Zone TD%","value":"57.8%","rank":"#3 NFL","trend":"+5.0%"},{"label":"Turnover Margin","value":"+0.8","rank":"#8 NFL","trend":"+0.4"},{"label":"3rd Down","value":"42.1%","rank":"#6 NFL","trend":"+3.2%"}],
-  "leaders":[{"stat":"Passing EPA","player":"Brock Purdy","value":"0.21 / dropback"},{"stat":"Rush EPA","player":"Christian McCaffrey","value":"0.16 / rush"},{"stat":"Receiving YPRR","player":"Brandon Aiyuk","value":"2.47"},{"stat":"YAC / Rec","player":"Deebo Samuel","value":"7.8"},{"stat":"Target Share","player":"George Kittle","value":"19.5%"}],
-  "weekly":[
-    {"week":1,"opponent":"NYJ","result":"W","off_epa":0.18,"def_epa_allowed":-0.08,"pass_epa":0.22,"rush_epa":0.13,"success_rate":48.3,"explosive_rate":11.2,"red_zone":60,"third_down":44,"proe":2.4,"wp_swing":18,"points_for":32,"points_against":19},
-    {"week":2,"opponent":"MIN","result":"W","off_epa":0.09,"def_epa_allowed":0.02,"pass_epa":0.13,"rush_epa":0.07,"success_rate":45.1,"explosive_rate":10.7,"red_zone":50,"third_down":39,"proe":-1.1,"wp_swing":11,"points_for":27,"points_against":24},
-    {"week":3,"opponent":"LAR","result":"L","off_epa":-0.10,"def_epa_allowed":0.15,"pass_epa":-0.04,"rush_epa":-0.13,"success_rate":41.2,"explosive_rate":8.3,"red_zone":40,"third_down":32,"proe":4.8,"wp_swing":-15,"points_for":17,"points_against":30},
-    {"week":4,"opponent":"ARI","result":"W","off_epa":0.23,"def_epa_allowed":-0.12,"pass_epa":0.28,"rush_epa":0.18,"success_rate":52.7,"explosive_rate":13.6,"red_zone":75,"third_down":50,"proe":1.9,"wp_swing":24,"points_for":35,"points_against":16},
-    {"week":5,"opponent":"SEA","result":"W","off_epa":0.16,"def_epa_allowed":-0.04,"pass_epa":0.19,"rush_epa":0.12,"success_rate":47.9,"explosive_rate":12.1,"red_zone":67,"third_down":45,"proe":-2.2,"wp_swing":14,"points_for":28,"points_against":20},
-    {"week":6,"opponent":"TB","result":"W","off_epa":0.06,"def_epa_allowed":-0.09,"pass_epa":0.10,"rush_epa":0.03,"success_rate":43.4,"explosive_rate":9.8,"red_zone":50,"third_down":40,"proe":0.4,"wp_swing":9,"points_for":24,"points_against":17},
-    {"week":7,"opponent":"DAL","result":"L","off_epa":-0.04,"def_epa_allowed":0.11,"pass_epa":0.01,"rush_epa":-0.08,"success_rate":42.2,"explosive_rate":9.1,"red_zone":43,"third_down":35,"proe":5.1,"wp_swing":-10,"points_for":20,"points_against":27},
-    {"week":8,"opponent":"CLE","result":"W","off_epa":0.28,"def_epa_allowed":-0.15,"pass_epa":0.31,"rush_epa":0.20,"success_rate":54.0,"explosive_rate":14.9,"red_zone":80,"third_down":53,"proe":1.2,"wp_swing":27,"points_for":38,"points_against":13}
+  "team": "SF",
+  "name": "San Francisco 49ers",
+  "brand": "NinerVision",
+  "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
+  "wordmark": "https://a.espncdn.com/i/teamlogos/nfl/500-dark/sf.png",
+  "primary": "#AA0000",
+  "gold": "#B3995D",
+  "dark": "#070707",
+  "summary": {
+    "record": "0-0",
+    "overall_rank": 5,
+    "off_epa_rank": 4,
+    "def_epa_rank": 9,
+    "success_rank": 7,
+    "explosive_rank": 5,
+    "red_zone_rank": 3
+  },
+  "kpis": [
+    {
+      "label": "Off EPA/play",
+      "value": 0.142,
+      "rank": "#1 / 32",
+      "trend": "Top 0%"
+    },
+    {
+      "label": "Def EPA Allowed",
+      "value": -0.058,
+      "rank": "#3 / 32",
+      "trend": "Elite"
+    },
+    {
+      "label": "Success Rate",
+      "value": "47.8%",
+      "rank": "#3 / 32",
+      "trend": "Top tier"
+    },
+    {
+      "label": "Explosive Rate",
+      "value": "12.7%",
+      "rank": "#1 / 32",
+      "trend": "Arrow up"
+    },
+    {
+      "label": "Pressure Rate",
+      "value": "34.6%",
+      "rank": "#6 / 32",
+      "trend": "Top 10"
+    }
   ],
-  "situational":[{"name":"Early Downs","value":51},{"name":"3rd Down","value":42},{"name":"Red Zone","value":58},{"name":"Goal-to-Go","value":64},{"name":"2-Minute","value":47},{"name":"Neutral Script","value":49}],
-  "explosives":[{"type":"Deep Pass","rate":8.2,"epa":0.37},{"type":"YAC Catch","rate":11.4,"epa":0.29},{"type":"Outside Run","rate":6.6,"epa":0.18},{"type":"Screen","rate":5.9,"epa":0.12},{"type":"Play Action","rate":13.1,"epa":0.32}],
-  "advancedTable":[{"metric":"EPA / Play","offense":"0.12","defense":"-0.06","rank":"#4 / #9"},{"metric":"Success Rate","offense":"46.3%","defense":"42.8%","rank":"#7 / #11"},{"metric":"Explosive Rate","offense":"11.5%","defense":"8.7%","rank":"#5 / #10"},{"metric":"PROE","offense":"+1.5%","defense":"—","rank":"#12"},{"metric":"Red Zone TD%","offense":"57.8%","defense":"48.4%","rank":"#3 / #8"},{"metric":"3rd Down","offense":"42.1%","defense":"36.9%","rank":"#6 / #7"}]
+  "leaders": [
+    {
+      "stat": "Passing EPA",
+      "player": "Brock Purdy",
+      "value": "0.21 / dropback"
+    },
+    {
+      "stat": "Rush EPA",
+      "player": "Christian McCaffrey",
+      "value": "0.16 / rush"
+    },
+    {
+      "stat": "Receiving YPRR",
+      "player": "Brandon Aiyuk",
+      "value": "2.47"
+    },
+    {
+      "stat": "YAC / Rec",
+      "player": "Deebo Samuel",
+      "value": "7.8"
+    },
+    {
+      "stat": "Target Share",
+      "player": "George Kittle",
+      "value": "19.5%"
+    }
+  ],
+  "weekly": [
+    {
+      "week": 1,
+      "opponent": "NYJ",
+      "result": "W",
+      "off_epa": 0.18,
+      "def_epa_allowed": -0.08,
+      "pass_epa": 0.22,
+      "rush_epa": 0.13,
+      "success_rate": 48.3,
+      "explosive_rate": 11.2,
+      "red_zone": 60,
+      "third_down": 44,
+      "proe": 2.4,
+      "wp_swing": 18,
+      "points_for": 32,
+      "points_against": 19
+    },
+    {
+      "week": 2,
+      "opponent": "MIN",
+      "result": "W",
+      "off_epa": 0.09,
+      "def_epa_allowed": 0.02,
+      "pass_epa": 0.13,
+      "rush_epa": 0.07,
+      "success_rate": 45.1,
+      "explosive_rate": 10.7,
+      "red_zone": 50,
+      "third_down": 39,
+      "proe": -1.1,
+      "wp_swing": 11,
+      "points_for": 27,
+      "points_against": 24
+    },
+    {
+      "week": 3,
+      "opponent": "LAR",
+      "result": "L",
+      "off_epa": -0.1,
+      "def_epa_allowed": 0.15,
+      "pass_epa": -0.04,
+      "rush_epa": -0.13,
+      "success_rate": 41.2,
+      "explosive_rate": 8.3,
+      "red_zone": 40,
+      "third_down": 32,
+      "proe": 4.8,
+      "wp_swing": -15,
+      "points_for": 17,
+      "points_against": 30
+    },
+    {
+      "week": 4,
+      "opponent": "ARI",
+      "result": "W",
+      "off_epa": 0.23,
+      "def_epa_allowed": -0.12,
+      "pass_epa": 0.28,
+      "rush_epa": 0.18,
+      "success_rate": 52.7,
+      "explosive_rate": 13.6,
+      "red_zone": 75,
+      "third_down": 50,
+      "proe": 1.9,
+      "wp_swing": 24,
+      "points_for": 35,
+      "points_against": 16
+    },
+    {
+      "week": 5,
+      "opponent": "SEA",
+      "result": "W",
+      "off_epa": 0.16,
+      "def_epa_allowed": -0.04,
+      "pass_epa": 0.19,
+      "rush_epa": 0.12,
+      "success_rate": 47.9,
+      "explosive_rate": 12.1,
+      "red_zone": 67,
+      "third_down": 45,
+      "proe": -2.2,
+      "wp_swing": 14,
+      "points_for": 28,
+      "points_against": 20
+    },
+    {
+      "week": 6,
+      "opponent": "TB",
+      "result": "W",
+      "off_epa": 0.06,
+      "def_epa_allowed": -0.09,
+      "pass_epa": 0.1,
+      "rush_epa": 0.03,
+      "success_rate": 43.4,
+      "explosive_rate": 9.8,
+      "red_zone": 50,
+      "third_down": 40,
+      "proe": 0.4,
+      "wp_swing": 9,
+      "points_for": 24,
+      "points_against": 17
+    },
+    {
+      "week": 7,
+      "opponent": "DAL",
+      "result": "L",
+      "off_epa": -0.04,
+      "def_epa_allowed": 0.11,
+      "pass_epa": 0.01,
+      "rush_epa": -0.08,
+      "success_rate": 42.2,
+      "explosive_rate": 9.1,
+      "red_zone": 43,
+      "third_down": 35,
+      "proe": 5.1,
+      "wp_swing": -10,
+      "points_for": 20,
+      "points_against": 27
+    },
+    {
+      "week": 8,
+      "opponent": "CLE",
+      "result": "W",
+      "off_epa": 0.28,
+      "def_epa_allowed": -0.15,
+      "pass_epa": 0.31,
+      "rush_epa": 0.2,
+      "success_rate": 54.0,
+      "explosive_rate": 14.9,
+      "red_zone": 80,
+      "third_down": 53,
+      "proe": 1.2,
+      "wp_swing": 27,
+      "points_for": 38,
+      "points_against": 13
+    }
+  ],
+  "situational": [
+    {
+      "name": "Early Downs",
+      "value": 51
+    },
+    {
+      "name": "3rd Down",
+      "value": 42
+    },
+    {
+      "name": "Red Zone",
+      "value": 58
+    },
+    {
+      "name": "Goal-to-Go",
+      "value": 64
+    },
+    {
+      "name": "2-Minute",
+      "value": 47
+    },
+    {
+      "name": "Neutral Script",
+      "value": 49
+    }
+  ],
+  "explosives": [
+    {
+      "type": "Deep Pass",
+      "rate": 8.2,
+      "epa": 0.37
+    },
+    {
+      "type": "YAC Catch",
+      "rate": 11.4,
+      "epa": 0.29
+    },
+    {
+      "type": "Outside Run",
+      "rate": 6.6,
+      "epa": 0.18
+    },
+    {
+      "type": "Screen",
+      "rate": 5.9,
+      "epa": 0.12
+    },
+    {
+      "type": "Play Action",
+      "rate": 13.1,
+      "epa": 0.32
+    }
+  ],
+  "advancedTable": [
+    {
+      "metric": "EPA / Play",
+      "offense": "0.12",
+      "defense": "-0.06",
+      "rank": "#4 / #9"
+    },
+    {
+      "metric": "Success Rate",
+      "offense": "46.3%",
+      "defense": "42.8%",
+      "rank": "#7 / #11"
+    },
+    {
+      "metric": "Explosive Rate",
+      "offense": "11.5%",
+      "defense": "8.7%",
+      "rank": "#5 / #10"
+    },
+    {
+      "metric": "PROE",
+      "offense": "+1.5%",
+      "defense": "\u2014",
+      "rank": "#12"
+    },
+    {
+      "metric": "Red Zone TD%",
+      "offense": "57.8%",
+      "defense": "48.4%",
+      "rank": "#3 / #8"
+    },
+    {
+      "metric": "3rd Down",
+      "offense": "42.1%",
+      "defense": "36.9%",
+      "rank": "#6 / #7"
+    }
+  ],
+  "leagueRanks": [
+    {
+      "metric": "Off EPA/play",
+      "value": 0.142,
+      "rank": 1,
+      "of": 32,
+      "pct": 100
+    },
+    {
+      "metric": "Def EPA allowed",
+      "value": -0.058,
+      "rank": 3,
+      "of": 32,
+      "pct": 94
+    },
+    {
+      "metric": "Success Rate",
+      "value": 47.8,
+      "rank": 3,
+      "of": 32,
+      "pct": 94
+    },
+    {
+      "metric": "Explosive Rate",
+      "value": 12.7,
+      "rank": 1,
+      "of": 32,
+      "pct": 100
+    },
+    {
+      "metric": "Pressure Rate",
+      "value": 34.6,
+      "rank": 6,
+      "of": 32,
+      "pct": 84
+    }
+  ]
 }

@@ -1,0 +1,988 @@
+[
+  {
+    "id": "00-0027114",
+    "name": "Thomas Morstead",
+    "pos": "P",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/uicxa9bwvrenvcwnoklm",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0027224",
+    "name": "Jon Weeks",
+    "pos": "LS",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/efqsxmef1aoqnw6co1au",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0027857",
+    "name": "Trent Williams",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/z3rgsbkzy0sripzunidx",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0029892",
+    "name": "Kyle Juszczyk",
+    "pos": "RB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/qflumv1aag7yw9mgwpga",
+    "stats": {
+      "Targets": 33,
+      "Receptions": 29,
+      "Receiving Yds": 273,
+      "Rush Yds": -6
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0031554",
+    "name": "Eric Kendricks",
+    "pos": "LB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/adc49lyuljufsfseggdc",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0032379",
+    "name": "Eli Apple",
+    "pos": "DB",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/szrv0msliekcbdfulpzb",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0032701",
+    "name": "Jake Brendel",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/fw1g79qwk1gbhmdjvhfv",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0032775",
+    "name": "Demarcus Robinson",
+    "pos": "WR",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/aynbxqjpwz1vhpxbxvv8",
+    "stats": {
+      "Targets": 43,
+      "Receptions": 29,
+      "Receiving Yds": 388,
+      "Rush Yds": 6
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0033280",
+    "name": "Christian McCaffrey",
+    "pos": "RB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/resjdwihunsqckohcorj",
+    "stats": {
+      "Targets": 143,
+      "Receptions": 113,
+      "Receiving Yds": 1029,
+      "Rush Yds": 1285
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0033288",
+    "name": "George Kittle",
+    "pos": "TE",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ztz3xqjaqgok9m4nylgs",
+    "stats": {
+      "Targets": 71,
+      "Receptions": 58,
+      "Receiving Yds": 634,
+      "Rush Yds": -3
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0033292",
+    "name": "Trent Taylor",
+    "pos": "WR",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ei3usgh5l8gikdvksulr",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0033307",
+    "name": "Kendrick Bourne",
+    "pos": "WR",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/rroh157jvpywprbfn3vx",
+    "stats": {
+      "Targets": 55,
+      "Receptions": 37,
+      "Receiving Yds": 551
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034173",
+    "name": "Eddy Pineiro",
+    "pos": "K",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/l4rrfcuczjau7q02h2iz",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034375",
+    "name": "Kyzir White",
+    "pos": "LB",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/n5sjtcxydtaszz7yeyqw",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034391",
+    "name": "Siran Neal",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/kq7kbeol3boyczqkm9jx",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034411",
+    "name": "Russell Gage",
+    "pos": "WR",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/oigboeq0amnbgw7lnda0",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034461",
+    "name": "Bruce Hector",
+    "pos": "DL",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/qdli9iqgoixoexclb8rz",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034763",
+    "name": "Brandon Parker",
+    "pos": "OL",
+    "status": "INA",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/s3cp5zcmlnrolrof84aq",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034815",
+    "name": "Fred Warner",
+    "pos": "LB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/u3en19iyyfc64d3vprh6",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0034867",
+    "name": "Malik Turner",
+    "pos": "WR",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/private/f_auto,q_auto/league/r7wv14bgrb5ohjmqsf9p",
+    "stats": {
+      "Targets": 2
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035026",
+    "name": "Kevin Givens",
+    "pos": "DL",
+    "status": "INA",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/dpbmpsyvi88lpb4xebly",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035233",
+    "name": "Andre Dillard",
+    "pos": "OL",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/nh9a3gyfwpgdkk6qbhcj",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035269",
+    "name": "Matt Gay",
+    "pos": "K",
+    "status": "TRD",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/qeca8ofwxhytcioy29wc",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035295",
+    "name": "Isaiah Prince",
+    "pos": "OL",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/private/f_auto,q_auto/league/dp1scgce6httdu0udyng",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035413",
+    "name": "Luke Gifford",
+    "pos": "LB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/zuskjpnniq2xwnao6tuk",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035692",
+    "name": "Clelin Ferrell",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/rit24n5qbvlrxdv6w9fq",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035717",
+    "name": "Nick Bosa",
+    "pos": "DL",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/d41bo71xbojqb4picswi",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035829",
+    "name": "Austen Pleasants",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/qrc7z7ftin1tjdvhdd8q",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0035973",
+    "name": "Patrick Taylor",
+    "pos": "RB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/nd1utxii5exwfoujq5a4",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036151",
+    "name": "Bryce Huff",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/pminx3vvyt9laihkxk55",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036256",
+    "name": "Colton McKivitz",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ljxuxdusiz3j2raspwst",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036259",
+    "name": "Jauan Jennings",
+    "pos": "WR",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cdx9mq3iglzog9mkqvdr",
+    "stats": {
+      "Targets": 98,
+      "Receptions": 58,
+      "Receiving Yds": 711,
+      "Pass Yds": 29
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036261",
+    "name": "Brandon Aiyuk",
+    "pos": "WR",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/avzzxycxyculxxqce5k7",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036266",
+    "name": "Jordan Elliott",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/vkl6igrusm0srrkge1d9",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036272",
+    "name": "Ben Bartch",
+    "pos": "OL",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cyqdherczwbrk63buszh",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036288",
+    "name": "Yetur Gross-Matos",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/w1xhz0qsd0rr5hczbpb8",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036295",
+    "name": "Matt Hennessy",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/iruohug4gurmckekn4zs",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036448",
+    "name": "Isaac Alarcon",
+    "pos": "OL",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/tf80dmb1inreek7ijguw",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036450",
+    "name": "Ke'Shawn Vaughn",
+    "pos": "RB",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/private/f_auto,q_auto/league/npa1msmoqbig9cqznkti",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036502",
+    "name": "Jason Pinnock",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/vfudin1xe9wdv1bv6awj",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036511",
+    "name": "Milo Eifler",
+    "pos": "LB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/rfmdcyim9q0prw56mzgw",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036563",
+    "name": "Deommodore Lenoir",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ypghnprlnzwmxjcrbpk7",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036638",
+    "name": "Darrick Forrest",
+    "pos": "DB",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/t1k57hvbictnyjh65ygx",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036664",
+    "name": "Will Bradley-King",
+    "pos": "DL",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/twnmwxwnx4tk8bwvhmdz",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036728",
+    "name": "Curtis Robinson",
+    "pos": "LB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/t0a61ugsjq7akmobnrh5",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036844",
+    "name": "Garret Wallow",
+    "pos": "LB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/jf7xnestp0wmq0lbezxs",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036887",
+    "name": "Luke Farrell",
+    "pos": "TE",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/sccmpo8xbzdbjasmwcfj",
+    "stats": {
+      "Targets": 17,
+      "Receptions": 12,
+      "Receiving Yds": 86
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036921",
+    "name": "Tarron Jackson",
+    "pos": "LB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/tfd72aqmphacayrwxsu3",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0036972",
+    "name": "Mac Jones",
+    "pos": "QB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/v5sg1z9qvdpjeapblndz",
+    "stats": {
+      "Rush Yds": 67,
+      "Pass Yds": 2155
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037112",
+    "name": "Jake Tonges",
+    "pos": "TE",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/uztcdowl4wig2uhy1qxh",
+    "stats": {
+      "Targets": 55,
+      "Receptions": 40,
+      "Receiving Yds": 366
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037321",
+    "name": "Chase Lucas",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ftkp0eabjmqrbftyddyo",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037602",
+    "name": "Sam Okuayinonu",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/bz3qx6p6ua5e7e5kuukk",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037746",
+    "name": "Brian Robinson",
+    "pos": "RB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/n1xhex1ytisxcbcggqu7",
+    "stats": {
+      "Targets": 13,
+      "Receptions": 9,
+      "Receiving Yds": 28,
+      "Rush Yds": 404
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037829",
+    "name": "Spencer Burford",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/rizdurffvnwd66ait3pt",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037831",
+    "name": "Nick Zakelj",
+    "pos": "OL",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ef2vqxfsntkcn8butiei",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037832",
+    "name": "Kalia Davis",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/bqad9jqdvg5tis5i3vgu",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0037834",
+    "name": "Brock Purdy",
+    "pos": "QB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/xykdxnvxpf9pobxvkjfj",
+    "stats": {
+      "Rush Yds": 208,
+      "Pass Yds": 2569
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038090",
+    "name": "Skyy Moore",
+    "pos": "WR",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/fadcpretmhczwjq8ovae",
+    "stats": {
+      "Targets": 8,
+      "Receptions": 5,
+      "Receiving Yds": 87,
+      "Rush Yds": 14
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038554",
+    "name": "Ji'Ayir Brown",
+    "pos": "DB",
+    "status": "INA",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/gmgewszcsvxdb63dmqby",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038594",
+    "name": "Darrell Luter Jr.",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/c7i5bj3inrno1uvjxwv4",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038603",
+    "name": "Robert Beal Jr.",
+    "pos": "DL",
+    "status": "INA",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/yuxokzgzu2p3o68w0wfx",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038625",
+    "name": "Dee Winters",
+    "pos": "LB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/uq6qbsrwlkhnu7lsrejj",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038632",
+    "name": "Colton Dowell",
+    "pos": "WR",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/asnykoet55r5qhhewijc",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038641",
+    "name": "Isaiah Bolden",
+    "pos": "DB",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/at3zmsf7seu7exc1d4od",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038643",
+    "name": "Brayden Willis",
+    "pos": "TE",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/pz1nzzfellquco7nk65e",
+    "stats": {
+      "Targets": 1
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038648",
+    "name": "Jalen Graham",
+    "pos": "LB",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/oxlmlst1qeq1wi0hq0j6",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038658",
+    "name": "Adrian Martinez",
+    "pos": "QB",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/uxqlgiljk3wecurnynmg",
+    "stats": {
+      "Rush Yds": -1
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038806",
+    "name": "Malik Knowles",
+    "pos": "WR",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/die3cesy0wyzye0urpib",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038842",
+    "name": "Shakel Brown",
+    "pos": "DL",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/kh4sxzkwi4qu6sjvasf5",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0038865",
+    "name": "Andrew Farmer",
+    "pos": "LB",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/yhtbla5k72ipuqg7kfne",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039134",
+    "name": "Tre Tomlinson",
+    "pos": "DB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/n5pfv126xw0psc0d1ydz",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039148",
+    "name": "Keion White",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/wkq3kmgtrqxsndffclam",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039345",
+    "name": "Renardo Green",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/reoqk5hmsjugiaed55fk",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039351",
+    "name": "Dominick Puni",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ig3zuxuiem0nqnrytcls",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039360",
+    "name": "Malik Mustapha",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/de6mruukp9ydyppi9ah6",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039363",
+    "name": "Isaac Guerendo",
+    "pos": "RB",
+    "status": "INA",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/lr1qp5tsa5xshzt02urm",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039365",
+    "name": "Jacob Cowing",
+    "pos": "WR",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/nkyvxf2mewlwkozdszcg",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039435",
+    "name": "Tatum Bethune",
+    "pos": "LB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/hbmwbevay9amntpkvfbt",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039489",
+    "name": "Hayden Rucci",
+    "pos": "TE",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ditkdfxzbjpe6cqcv2ou",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039564",
+    "name": "Jaylon Allen",
+    "pos": "DL",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/j8tdz5i5tfridduscqnt",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039696",
+    "name": "Evan Anderson",
+    "pos": "DL",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/brvzpgd97dixgsux1pse",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039699",
+    "name": "Tanner Mordecai",
+    "pos": "QB",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/m9perzblplnzzit1mpzb",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039700",
+    "name": "Drake Nugent",
+    "pos": "OL",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/l0uqw19mggw4h7bmzuek",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039701",
+    "name": "Terique Owens",
+    "pos": "WR",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/kejtnksfk2kjm6inlqzz",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039853",
+    "name": "Javon Baker",
+    "pos": "WR",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/wlbxcwbm2byh2lnfhlam",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0039916",
+    "name": "Ricky Pearsall",
+    "pos": "WR",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ko3lwlcfkxaykcspt4nw",
+    "stats": {
+      "Targets": 55,
+      "Receptions": 36,
+      "Receiving Yds": 528,
+      "Rush Yds": -2
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040135",
+    "name": "Nick Martin",
+    "pos": "LB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cbeyemtjdosfcdhpy1fx",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040152",
+    "name": "Upton Stout",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/igyjtgzayft05v01yhuz",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040172",
+    "name": "Jordan Watkins",
+    "pos": "WR",
+    "status": "INA",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cdwpo3lveebc92rzcdas",
+    "stats": {
+      "Targets": 3,
+      "Receptions": 2,
+      "Receiving Yds": 26
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040177",
+    "name": "Jordan James",
+    "pos": "RB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/vhkfigionbm4xwjcbfzg",
+    "stats": {
+      "Targets": 1,
+      "Receptions": 1,
+      "Receiving Yds": 7,
+      "Rush Yds": 28
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040185",
+    "name": "Marques Sigle",
+    "pos": "DB",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/njl59cs0r2vlnob8uz8k",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040245",
+    "name": "Connor Colby",
+    "pos": "OL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/b0b2krvxbpylwerralyx",
+    "stats": {
+      "Targets": 1,
+      "Receptions": 1,
+      "Receiving Yds": -1
+    },
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040247",
+    "name": "Junior Bergen",
+    "pos": "WR",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/dlii21zjxadzebyoguh5",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040559",
+    "name": "Jakob Robinson",
+    "pos": "DB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/zwkasqlulqxwyvpogbxa",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040560",
+    "name": "Sebastian Valdez",
+    "pos": "DL",
+    "status": "INA",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cnb82o0pkp0k2ng5mrrp",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040589",
+    "name": "Kurtis Rourke",
+    "pos": "QB",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/my8ws9pavzbxxfulajzd",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040630",
+    "name": "Stone Blanton",
+    "pos": "LB",
+    "status": "CUT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/mlicadcuoerpyrmp7n82",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040659",
+    "name": "Derrick Canteen",
+    "pos": "DB",
+    "status": "DEV",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/s2tikaexxnje11kof81u",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040660",
+    "name": "Mykel Williams",
+    "pos": "DL",
+    "status": "RES",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/glewua5vtcbfvbm6j8s3",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040711",
+    "name": "CJ West",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/bhqq8ebh20hehf1em9zz",
+    "stats": {},
+    "rank": "\u2014"
+  },
+  {
+    "id": "00-0040721",
+    "name": "Alfred Collins",
+    "pos": "DL",
+    "status": "ACT",
+    "headshot": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/rjziol6cqynoyc0w0qfh",
+    "stats": {},
+    "rank": "\u2014"
+  }
+]

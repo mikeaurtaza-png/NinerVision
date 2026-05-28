@@ -1,13 +1,10 @@
 [
-{"week":"TBD","opponent":"LAR","name":"Rams","site":"Neutral","note":"Melbourne reported matchup","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lar.png"},
-{"week":"TBD","opponent":"SEA","name":"Seahawks","site":"Home/Away","note":"NFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/sea.png"},
-{"week":"TBD","opponent":"ARI","name":"Cardinals","site":"Home/Away","note":"NFC West","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/ari.png"},
-{"week":"TBD","opponent":"KC","name":"Chiefs","site":"TBD","note":"Contender measuring stick","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/kc.png"},
-{"week":"TBD","opponent":"PHI","name":"Eagles","site":"TBD","note":"NFC heavyweight","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/phi.png"},
-{"week":"TBD","opponent":"DAL","name":"Cowboys","site":"TBD","note":"Historic rivalry","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/dal.png"},
-{"week":"TBD","opponent":"MIA","name":"Dolphins","site":"TBD","note":"Speed matchup","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/mia.png"},
-{"week":"TBD","opponent":"MIN","name":"Vikings","site":"Mexico City reported","note":"International matchup","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/min.png"},
-{"week":"TBD","opponent":"LV","name":"Raiders","site":"TBD","note":"Bay Area storyline","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lv.png"},
-{"week":"TBD","opponent":"DEN","name":"Broncos","site":"TBD","note":"AFC West matchup","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/den.png"},
-{"week":"TBD","opponent":"LAC","name":"Chargers","site":"TBD","note":"AFC West matchup","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lac.png"}
+{"week":"1","opponent":"LAR","name":"Los Angeles Rams","site":"Melbourne, Australia","type":"International","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/lar.png","note":"International opener"},
+{"week":"TBD","opponent":"MIN","name":"Minnesota Vikings","site":"Mexico City","type":"International","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/min.png","note":"International game"},
+{"week":"TBD","opponent":"SEA","name":"Seattle Seahawks","site":"Home","type":"Division","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/sea.png","note":"NFC West"},
+{"week":"TBD","opponent":"ARI","name":"Arizona Cardinals","site":"Home","type":"Division","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/ari.png","note":"NFC West"},
+{"week":"TBD","opponent":"KC","name":"Kansas City Chiefs","site":"Home","type":"AFC","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/kc.png","note":"High-profile matchup"},
+{"week":"TBD","opponent":"PHI","name":"Philadelphia Eagles","site":"Home","type":"NFC","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/phi.png","note":"Contender test"},
+{"week":"TBD","opponent":"DAL","name":"Dallas Cowboys","site":"Away","type":"NFC","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/dal.png","note":"National draw"},
+{"week":"TBD","opponent":"DEN","name":"Denver Broncos","site":"Away","type":"AFC","logo":"https://a.espncdn.com/i/teamlogos/nfl/500/den.png","note":"AFC West"}
 ]

@@ -1,52 +1,154 @@
-import React, {useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import {
+  Area, AreaChart, Bar, BarChart, CartesianGrid, ComposedChart, Line, LineChart,
+  ResponsiveContainer, Radar, RadarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis,
+  Tooltip, XAxis, YAxis
+} from 'recharts';
+import {
+  Activity, BarChart3, CalendarDays, ChevronRight, Download, Gauge, Home, Layers,
+  LineChart as LineIcon, Search, Shield, Sparkles, Trophy, Users, Zap, Target, Swords,
+  TrendingUp, Flame, Eye, Table2
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 import './styles.css';
-import league from '../public/data/league_2025_demo.json';
-import players from '../public/data/players_2025_demo.json';
-import qbs from '../public/data/qbs_2025_demo.json';
-import schedule from '../public/data/schedule_2026_demo.json';
 
-const SF = league.find(t=>t.team==='SF');
-const metricInfo = {
-  nv_index:{label:'NinerVision Index', unit:'', better:'higher', key:'nv_index'},
-  off_epa:{label:'Off EPA / Play', unit:'', better:'higher', key:'off_epa'},
-  def_epa_allowed:{label:'EPA Allowed / Play', unit:'', better:'lower', key:'def_epa_allowed'},
-  neutral_pass_rate:{label:'Neutral Pass Rate', unit:'%', better:'higher', key:'neutral_pass_rate'},
-  explosive_rate:{label:'Explosive Play Rate', unit:'%', better:'higher', key:'explosive_rate'},
-  points_per_drive:{label:'Points / Drive', unit:'', better:'higher', key:'points_per_drive'},
-  red_zone_epa:{label:'Red Zone EPA / Play', unit:'', better:'higher', key:'red_zone_epa'},
-  third_down:{label:'3rd Down Rate', unit:'%', better:'higher', key:'third_down'},
-  two_min_epa:{label:'2-Min EPA / Play', unit:'', better:'higher', key:'two_min_epa'}
-};
-const tabs=[['command','⌂','Command'],['compare','◉','NFL Compare'],['visual','⌁','Visual Lab'],['qb','♔','QB Lab'],['matchups','◎','Matchups'],['players','♙','Player Lab'],['data','▦','Data']];
-function fmt(v,k){ if(['neutral_pass_rate','explosive_rate','third_down'].includes(k)) return `${(v*100).toFixed(1)}%`; if(k==='nv_index') return Math.round(v); return `${v>0?'+':''}${Number(v).toFixed(k==='points_per_drive'?2:3)}`; }
-function rankFor(team,key){ return team?.[key+'_rank'] || '—'; }
-function percentile(rank,total=32){ return Math.round((1-(rank-1)/(total-1))*100); }
-function sortedBy(key){ const desc=metricInfo[key].better!=='lower'; return [...league].sort((a,b)=>desc?b[key]-a[key]:a[key]-b[key]); }
-function Header(){return <header className="topbar"><div className="brand"><b>NINER<span>VISION</span></b><small>49ers Intelligence</small></div><div className="top-actions"><button>2025 Data</button><button>Pipeline Ready</button><button className="export">Export</button></div></header>}
-function Sidebar({tab,setTab}){return <aside className="sidebar">{tabs.map(t=><button key={t[0]} className={tab===t[0]?'active':''} onClick={()=>setTab(t[0])}><span>{t[1]}</span><em>{t[2]}</em></button>)}</aside>}
-function Shell(){const [tab,setTab]=useState('command'); return <><Header/><Sidebar tab={tab} setTab={setTab}/><main className="page">{tab==='command'&&<Command/>}{tab==='compare'&&<Compare/>}{tab==='visual'&&<VisualLab/>}{tab==='qb'&&<QBLab/>}{tab==='matchups'&&<Matchups/>}{tab==='players'&&<PlayerLab/>}{tab==='data'&&<DataTable/>}</main></>}
-function StatCard({label,value,rank,detail}){return <div className="stat"><small>{label}</small><strong>{value}</strong><span>#{rank}/32 · {percentile(rank)}th pct</span>{detail&&<em>{detail}</em>}</div>}
-function IntelligenceStrip(){const cards=[['Identity','Efficient + explosive','YAC-driven scoring profile'],['League Context',`#${rankFor(SF,'nv_index')}/32 NV Index`,'Contender tier benchmark'],['Trend Lens','Last-4 view ready','Pipeline will populate rolling data'],['Next Best Upgrade','Real nflverse run','Removes every demo fallback']];return <div className="intel-strip">{cards.map(c=><article key={c[0]}><small>{c[0]}</small><b>{c[1]}</b><span>{c[2]}</span></article>)}</div>}
-function Command(){return <section><Hero title="49ers Command Center" sub="Compact intelligence view: rankings, trends, matchup context, and chart-first football insight."/><IntelligenceStrip/><div className="metrics"><StatCard label="Off EPA / Play" value={fmt(SF.off_epa,'off_epa')} rank={rankFor(SF,'off_epa')} detail="Top-tier efficiency"/><StatCard label="Success / 3rd Down" value={fmt(SF.third_down,'third_down')} rank={rankFor(SF,'third_down')} detail="Sustained drives"/><StatCard label="Explosive Rate" value={fmt(SF.explosive_rate,'explosive_rate')} rank={rankFor(SF,'explosive_rate')} detail="Chunk-play profile"/><StatCard label="Red Zone EPA" value={fmt(SF.red_zone_epa,'red_zone_epa')} rank={rankFor(SF,'red_zone_epa')} detail="Finishing drives"/></div><div className="grid two"><Panel title="Team Tiers" sub="Offense vs defense quadrant. 49ers logo highlighted."><TeamTierChart/></Panel><Panel title="Why Engine V2" sub="What drives the rank, not just what the metric means."><WhyEngine/></Panel></div><Panel title="Advanced Ranking Snapshot" sub="Logos, all 32 teams, SF highlighted"><RankingBars metric="off_epa" compact/></Panel></section>}
-function Hero({title,sub}){return <div className="hero"><div><p>⚡ NINERVISION</p><h1>{title}</h1><span>{sub}</span></div><img src={SF.logo} /></div>}
-function Panel({title,sub,children,actions}){return <div className="panel"><div className="panel-head"><div><h2>{title}</h2>{sub&&<p>{sub}</p>}</div>{actions}</div>{children}</div>}
-function RankingBars({metric='off_epa', compact=false}){const rows=sortedBy(metric); const values=rows.map(r=>r[metric]); const min=Math.min(...values), max=Math.max(...values); const zero=(-min)/(max-min)*100; return <div className={compact?'bars compact':'bars'}>{rows.map(r=>{const v=r[metric]; const isSF=r.team==='SF'; const left=v<0?((v-min)/(max-min)*100):zero; const width=Math.max(2,Math.abs(v)/(max-min)*100); return <div className="bar-row" key={r.team}><img src={r.logo}/><div className="bar-track"><i className="zero" style={{left:`${zero}%`}}/><b className={isSF?'sf':''} style={{left:`${v<0?left:zero}%`, width:`${width}%`}}/></div><strong>{fmt(v,metric)}</strong><small>#{rankFor(r,metric)}</small></div>})}</div>}
-function TeamTierChart({onSelect}){const w=640,h=430,p=56; const xs=league.map(t=>t.off_epa), ys=league.map(t=>t.def_epa_allowed); const minX=Math.min(...xs)-.02,maxX=Math.max(...xs)+.02,minY=Math.min(...ys)-.02,maxY=Math.max(...ys)+.02; const x=v=>p+(v-minX)/(maxX-minX)*(w-p*2); const y=v=>p+(v-minY)/(maxY-minY)*(h-p*2); return <svg className="tier" viewBox={`0 0 ${w} ${h}`}><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect x="0" y="0" width={w} height={h} rx="22"/><line x1={x(0)} x2={x(0)} y1={p} y2={h-p}/><line y1={y(0)} y2={y(0)} x1={p} x2={w-p}/><text x={p+8} y={p-18}>Weak Offense / Strong Defense</text><text x={w-p-218} y={p-18}>Strong Offense / Strong Defense</text><text x={p+8} y={h-p+34}>Weak Offense / Weak Defense</text><text x={w-p-205} y={h-p+34}>Strong Offense / Weak Defense</text>{league.map(t=><g key={t.team} className="team-dot" onClick={()=>onSelect&&onSelect(t)}><title>{`${t.name}: Off EPA ${fmt(t.off_epa,'off_epa')} · Def EPA Allowed ${fmt(t.def_epa_allowed,'def_epa_allowed')}`}</title><image href={t.logo} x={x(t.off_epa)-14} y={y(t.def_epa_allowed)-14} width={t.team==='SF'?38:28} height={t.team==='SF'?38:28} className={t.team==='SF'?'sf-logo':''}/></g>)}</svg>}
-function WhyEngine(){const items=[['Off EPA / Play', '#'+rankFor(SF,'off_epa')+'/32 · '+percentile(rankFor(SF,'off_epa'))+'th pct', ['Explosive passing and early-down efficiency keep SF in the top tier.','YAC-driven gains create efficient plays without needing only deep shots.','Primary limiter: pressure/down-and-distance risk can suppress drives.']],['Red Zone EPA', '#'+rankFor(SF,'red_zone_epa')+'/32 · '+percentile(rankFor(SF,'red_zone_epa'))+'th pct', ['Finishing profile is the clearest elite edge in this demo dataset.','Short-field efficiency supports points-per-drive ranking.','Watch whether this holds against top-10 red-zone defenses.']],['Matchup Translation','2026 projection layer', ['Use 2025 team strengths until 2026 games exist.','Cards compare SF offense to opponent defense and opponent offense to SF defense.','Replace demo data with nflverse output for real matchup intelligence.']]]; return <div className="why">{items.map((it,i)=><article key={i}><div><b>{it[0]}</b><span>{it[1]}</span></div><ul>{it[2].map(x=><li key={x}>{x}</li>)}</ul></article>)}</div>}
-function Compare(){const [metric,setMetric]=useState('nv_index'); const [selected,setSelected]=useState(SF);return <section><Hero title="NFL Compare" sub="All 32 teams plotted with logos, rank context, and league-average lines."/><div className="control"><label>Metric<select value={metric} onChange={e=>setMetric(e.target.value)}>{Object.keys(metricInfo).map(k=><option key={k} value={k}>{metricInfo[k].label}</option>)}</select></label><div className="pill"><img src={SF.logo}/>49ers: #{rankFor(SF,metric)}/32 · {fmt(SF[metric],metric)}</div></div><div className="grid two compare-grid"><Panel title="Offense vs Defense Quadrant" sub="Tap a team logo for a quick snapshot."><TeamTierChart onSelect={setSelected}/></Panel><TeamSnapshot team={selected} metric={metric}/></div><Panel title={`${metricInfo[metric].label} Ranking`} sub="SF highlighted. All 32 teams shown."><RankingBars metric={metric}/></Panel><Panel title="NinerVision Index Top 10" sub="Simple ranking list with tier labels."><RankingList/></Panel></section>}
-function TeamSnapshot({team,metric}){return <Panel title={team.team==='SF'?'49ers Snapshot':`${team.name} Snapshot`} sub="Quick league context from the selected logo."><div className="team-snapshot"><img src={team.logo}/><div><b>{team.name}</b><span>{team.tier}</span></div></div><div className="snapshot-grid"><p><span>{metricInfo[metric].label}</span><b>{fmt(team[metric],metric)}</b><em>#{rankFor(team,metric)}/32</em></p><p><span>NV Index</span><b>{Math.round(team.nv_index)}</b><em>#{rankFor(team,'nv_index')}/32</em></p><p><span>Off EPA</span><b>{fmt(team.off_epa,'off_epa')}</b><em>#{rankFor(team,'off_epa')}/32</em></p><p><span>Def EPA Allowed</span><b>{fmt(team.def_epa_allowed,'def_epa_allowed')}</b><em>#{rankFor(team,'def_epa_allowed')}/32</em></p></div><div className="micro-note">Use this panel later for opponent-specific scouting notes and matchup risk flags.</div></Panel>}
-function RankingList(){return <div className="ranklist">{sortedBy('nv_index').slice(0,10).map(r=><div className={r.team==='SF'?'hot':''} key={r.team}><span>#{rankFor(r,'nv_index')}</span><img src={r.logo}/><b>{r.name}</b><em>{r.tier}</em><strong>{Math.round(r.nv_index)}</strong></div>)}</div>}
-function VisualLab(){const charts=['off_epa','def_epa_allowed','neutral_pass_rate','explosive_rate','points_per_drive','red_zone_epa','third_down','two_min_epa']; const [metric,setMetric]=useState('off_epa'); const [focus,setFocus]=useState(false); return <section><Hero title="Visual Lab" sub="Premium chart library: rankings, tiers, situational football, and share-ready layouts."/><div className="chips">{charts.map(c=><button key={c} className={metric===c?'active':''} onClick={()=>setMetric(c)}>{metricInfo[c].label}</button>)}</div><Panel title={metricInfo[metric].label} sub="All 32 teams with logos. Designed to fit NinerVision dark mode." actions={<button className="mini" onClick={()=>setFocus(true)}>Focus</button>}><RankingBars metric={metric}/></Panel><div className="grid two"><Panel title="Team Tiers" sub="EPA quadrant"><TeamTierChart/></Panel><Panel title="Chart Checklist" sub="Next additions"><ul className="clean"><li>Download PNG / share graphic mode</li><li>League-average reference line</li><li>Rolling last-4-week trends</li><li>Opponent-adjusted splits</li><li>Fullscreen focus mode</li></ul></Panel></div>{focus&&<div className="modal" onClick={()=>setFocus(false)}><div className="modal-card" onClick={e=>e.stopPropagation()}><button className="close" onClick={()=>setFocus(false)}>×</button><h2>{metricInfo[metric].label}</h2><RankingBars metric={metric}/></div></div>}</section>}
-function QBLab(){return <section><Hero title="QB Lab" sub="Brock Purdy against starting QBs with rank, efficiency, CPOE, pressure splits, and scatter views."/><Panel title="Starting QB EPA / Dropback" sub="Purdy highlighted"><QBBar/></Panel><Panel title="EPA vs CPOE Scatter" sub="Efficiency plus accuracy context"><QBScatter/></Panel></section>}
-function QBBar(){const rows=[...qbs].sort((a,b)=>b.epa-a.epa); const min=Math.min(...rows.map(r=>r.epa)), max=Math.max(...rows.map(r=>r.epa)); const zero=(-min)/(max-min)*100; return <div className="bars qb">{rows.map(q=>{const v=q.epa,isSF=q.team==='SF'; const left=v<0?((v-min)/(max-min)*100):zero; const width=Math.max(2,Math.abs(v)/(max-min)*100); return <div className="bar-row" key={q.name}><img src={q.logo}/><span className="name">{q.name}</span><div className="bar-track"><i className="zero" style={{left:`${zero}%`}}/><b className={isSF?'sf':''} style={{left:`${v<0?left:zero}%`,width:`${width}%`}}/></div><strong>{fmt(v,'off_epa')}</strong><small>#{q.rank}</small></div>})}</div>}
-function QBScatter(){const w=640,h=360,p=48; const minX=-.1,maxX=.25,minY=-5,maxY=8; const x=v=>p+(v-minX)/(maxX-minX)*(w-p*2); const y=v=>h-p-(v-minY)/(maxY-minY)*(h-p*2); return <svg className="scatter" viewBox={`0 0 ${w} ${h}`}><rect width={w} height={h} rx="20"/><line x1={x(0)} x2={x(0)} y1={p} y2={h-p}/><line y1={y(0)} y2={y(0)} x1={p} x2={w-p}/>{qbs.map(q=><g key={q.name}><image href={q.logo} x={x(q.epa)-12} y={y(q.cpoe)-12} width={q.team==='SF'?34:24} height={q.team==='SF'?34:24}/>{q.team==='SF'&&<text x={x(q.epa)+18} y={y(q.cpoe)}>{q.name}</text>}</g>)}<text x={p} y={24}>EPA/dropback →</text><text x={w-150} y={h-16}>CPOE ↑</text></svg>}
-function Matchups(){const [selected,setSelected]=useState(schedule[0]); return <section><Hero title="2026 Matchup Intelligence" sub="Click any scheduled opponent to open a full matchup report powered by 2025 data until 2026 games exist."/><div className="match-layout"><div className="schedule-list">{schedule.map(g=><button key={g.opponent} className={selected.opponent===g.opponent?'active':''} onClick={()=>setSelected(g)}><img src={g.logo}/><span>Week {g.week}</span><b>49ers vs {g.opponentName}</b><em>{g.note}</em></button>)}</div><MatchupReport game={selected}/></div></section>}
-function MatchupReport({game}){const opp=league.find(t=>t.team===game.opponent); const rows=[['SF Off vs Opp Def', SF.off_epa, rankFor(SF,'off_epa'), opp.def_epa_allowed, rankFor(opp,'def_epa_allowed')],['SF Def vs Opp Off', SF.def_epa_allowed, rankFor(SF,'def_epa_allowed'), opp.off_epa, rankFor(opp,'off_epa')],['Explosive Profile', SF.explosive_rate, rankFor(SF,'explosive_rate'), opp.explosive_rate, rankFor(opp,'explosive_rate')],['Red Zone', SF.red_zone_epa, rankFor(SF,'red_zone_epa'), opp.red_zone_epa, rankFor(opp,'red_zone_epa')],['3rd Down', SF.third_down, rankFor(SF,'third_down'), opp.third_down, rankFor(opp,'third_down')],['Points / Drive', SF.points_per_drive, rankFor(SF,'points_per_drive'), opp.points_per_drive, rankFor(opp,'points_per_drive')]]; const sfEdges=rows.filter(r=>Number(r[2])<Number(r[4])).length; return <Panel title={`49ers vs ${opp.name}`} sub={game.note} actions={<button className="mini">Focus</button>}><div className="versus"><img src={SF.logo}/><strong>49ers</strong><span>VS</span><strong>{opp.name}</strong><img src={opp.logo}/></div><div className="edge"><div><small>49ers Edge</small><b>{sfEdges}</b><span>category wins</span></div><div><small>{opp.name} Edge</small><b>{rows.length-sfEdges}</b><span>category wins</span></div></div><div className="matrix"><div className="m-head"><b>Category</b><b>49ers</b><b>Rank</b><b>{opp.name}</b><b>Rank</b></div>{rows.map(r=><div key={r[0]}><span>{r[0]}</span><strong>{typeof r[1]==='number'?fmt(r[1],guessMetric(r[0])):r[1]}</strong><em>#{r[2]}/32</em><strong>{typeof r[3]==='number'?fmt(r[3],guessMetric(r[0])):r[3]}</strong><em>#{r[4]}/32</em></div>)}</div><div className="grid two matchup-extra"><KeyMatchups opp={opp}/><Panel title="Matchup Shape" sub="Radar-style profile"><MatchupRadar opp={opp}/></Panel></div><div className="why"><article><div><b>Matchup Why Engine</b><span>{sfEdges>3?'49ers lean':'Tight matchup'}</span></div><ul><li>Compares SF offense to opponent defense and opponent offense to SF defense.</li><li>Highlights category wins so the report is game-first, not chart-first.</li><li>When the pipeline runs, these notes become real opponent-specific football explanations.</li></ul></article></div></Panel>}
-function KeyMatchups({opp}){const cards=[['SF Explosives vs '+opp.team+' Defense','Can SF generate chunk plays without forcing low-percentage shots?'],['Purdy vs Pressure','Track pressure EPA, sack avoidance, and third-and-long risk.'],['Red Zone Finish','Which team converts efficiency into points when field shrinks?']];return <Panel title="Key Matchups" sub="What to watch"><div className="keycards">{cards.map(c=><article key={c[0]}><b>{c[0]}</b><span>{c[1]}</span></article>)}</div></Panel>}
-function MatchupRadar({opp}){const axes=[['EPA',SF.off_epa,opp.off_epa,'off_epa'],['Explosive',SF.explosive_rate,opp.explosive_rate,'explosive_rate'],['Red Zone',SF.red_zone_epa,opp.red_zone_epa,'red_zone_epa'],['3rd Down',SF.third_down,opp.third_down,'third_down'],['Drive Pts',SF.points_per_drive,opp.points_per_drive,'points_per_drive']];return <div className="radar-bars">{axes.map(a=>{const max=Math.max(Math.abs(a[1]),Math.abs(a[2]),.01);return <div key={a[0]}><label>{a[0]}</label><span><i style={{width:`${Math.max(8,Math.abs(a[1])/max*100)}%`}}/> <b>{fmt(a[1],a[3])}</b></span><span className="opp"><i style={{width:`${Math.max(8,Math.abs(a[2])/max*100)}%`}}/> <b>{fmt(a[2],a[3])}</b></span></div>})}</div>}
-function guessMetric(label){if(label.includes('Explosive'))return 'explosive_rate'; if(label.includes('Red'))return 'red_zone_epa'; if(label.includes('3rd'))return 'third_down'; if(label.includes('Points'))return 'points_per_drive'; return 'off_epa'}
-function PlayerLab(){const [q,setQ]=useState(''); const [pos,setPos]=useState('ALL'); const positions=['ALL',...Array.from(new Set(players.map(p=>p.pos)))]; const list=players.filter(p=>(pos==='ALL'||p.pos===pos)&&p.name.toLowerCase().includes(q.toLowerCase())); return <section><Hero title="Player Lab" sub="Active/relevant 49ers only. Removed stale placeholder players and added status validation field."/><div className="player-tools"><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search players..."/><div className="chips mini-chips">{positions.map(x=><button key={x} className={pos===x?'active':''} onClick={()=>setPos(x)}>{x}</button>)}</div></div><div className="player-grid">{list.map(p=><article className="player" key={p.id}><div className="status"><span>{p.status}</span><b>{p.pos}</b></div><img src={p.headshot}/><h3>{p.name}</h3>{Object.entries(p.stats).map(([k,v])=><p key={k}><span>{k}</span><b>{v}</b></p>)}<p><span>Rank</span><b>{p.rank}</b></p></article>)}</div>{!list.length&&<div className="notice"><b>No player matches that filter.</b></div>}</section>}
-function DataTable(){return <section><Hero title="Data Engine" sub="Frontend uses optimized JSON for speed. Run the pipeline script to replace demo files with real nflverse output."/><Panel title="Data status" sub="Important: this package includes demo JSON plus a real-data pipeline starter."><div className="notice"><b>Demo fallback is included so the site always builds.</b><p>Run <code>scripts/build_real_nflverse_data.py</code> locally to generate real 2025 data files, then commit the resulting JSON into <code>public/data</code>.</p></div></Panel><Panel title="League Data Preview"><div className="table"><div><b>Team</b><b>Off EPA</b><b>Def EPA Allowed</b><b>NV Index</b><b>Tier</b></div>{sortedBy('nv_index').slice(0,32).map(t=><div key={t.team}><span><img src={t.logo}/>{t.name}</span><span>{fmt(t.off_epa,'off_epa')}</span><span>{fmt(t.def_epa_allowed,'def_epa_allowed')}</span><span>{t.nv_index}</span><span>{t.tier}</span></div>)}</div></Panel></section>}
+const pages = [
+  { id: 'command', label: 'Command Center', icon: Home },
+  { id: 'players', label: 'Player Lab', icon: Users },
+  { id: 'charts', label: 'Visual Lab', icon: LineIcon },
+  { id: 'schedule', label: '2026 Schedule', icon: CalendarDays },
+  { id: 'data', label: 'Data Table', icon: Table2 },
+];
 
-createRoot(document.getElementById('root')).render(<Shell/>);
+const chartOptions = [
+  { id: 'epa', label: 'EPA Trend', desc: 'Offense, pass, rush, and defensive EPA', icon: Activity },
+  { id: 'success', label: 'Success Rate', desc: 'Weekly consistency and efficiency', icon: Gauge },
+  { id: 'explosive', label: 'Explosive Profile', desc: 'Chunk plays, YAC and play-action', icon: Zap },
+  { id: 'situational', label: 'Situational Football', desc: '3rd down, red zone, goal-to-go', icon: Shield },
+  { id: 'scoring', label: 'Game Flow', desc: 'Points, EPA and win-probability swings', icon: TrendingUp },
+  { id: 'radar', label: 'Team Radar', desc: 'Premium all-around team profile', icon: Sparkles },
+];
+
+const colors = { red: '#c31828', gold: '#b3995d', white: '#ffffff', gray: '#9da0a6', dark: '#090909' };
+
+function useJson(path, fallback) {
+  const [data, setData] = useState(fallback);
+  useEffect(() => { fetch(path).then(r => r.json()).then(setData).catch(() => setData(fallback)); }, [path]);
+  return data;
+}
+
+function useEspnRoster() {
+  const [live, setLive] = useState([]);
+  useEffect(() => {
+    fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/sf/roster')
+      .then(r => r.json())
+      .then(json => {
+        const groups = json.athletes || [];
+        const flat = groups.flatMap(group => (group.items || []).map(a => ({
+          id: a.id, name: a.displayName || a.fullName, pos: a.position?.abbreviation || '', number: a.jersey || '',
+          photo: a.headshot?.href || `https://a.espncdn.com/i/headshots/nfl/players/full/${a.id}.png`
+        })));
+        setLive(flat);
+      })
+      .catch(() => setLive([]));
+  }, []);
+  return live;
+}
+
+function StatCard({ kpi, index }) {
+  return <motion.div className="stat-card" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * .04 }}>
+    <div className="stat-label">{kpi.label}</div>
+    <div className="stat-value">{kpi.value}</div>
+    <div className="stat-foot"><span>{kpi.rank}</span><b>{kpi.trend}</b></div>
+  </motion.div>;
+}
+
+function TopNav({ page, setPage, team }) {
+  return <aside className="sidebar">
+    <div className="brand"><div><span>NINER</span><b>VISION</b></div><small>Elite 49ers Intelligence</small></div>
+    <img className="team-logo-xl" src={team.logo} alt="49ers logo" />
+    <nav>{pages.map(item => { const Icon = item.icon; return <button key={item.id} onClick={() => setPage(item.id)} className={page === item.id ? 'active' : ''}><Icon size={18} />{item.label}</button>; })}</nav>
+    <div className="side-card"><small>Data Stack</small><b>nflverse + ESPN</b><p>Local JSON first. Live assets second. Built for fast Vercel deployment.</p></div>
+  </aside>;
+}
+
+function Header({ team }) {
+  return <header className="header">
+    <div>
+      <div className="eyebrow"><Flame size={13}/> NINERVISION COMMAND</div>
+      <h1>49ers Intelligence Center</h1>
+      <p>Advanced EPA, success rate, player usage, matchup and schedule analytics with real team/player assets.</p>
+    </div>
+    <div className="header-rank"><img src={team.logo} alt="49ers"/><div><small>Overall Profile</small><b>#{team.summary?.overall_rank || 5}</b><span>NFL efficiency index</span></div></div>
+  </header>;
+}
+
+function Filters({ chart, setChart }) {
+  return <section className="toolbar">
+    <label>Season<select><option>2025</option><option>2026 Preview</option></select></label>
+    <label>Graph Type<select value={chart} onChange={e => setChart(e.target.value)}>{chartOptions.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}</select></label>
+    <label>Lens<select><option>Team</option><option>Offense</option><option>Defense</option><option>Players</option></select></label>
+    <button className="export"><Download size={16}/> Export</button>
+  </section>;
+}
+
+function ChartPanel({ chart, team }) {
+  const weekly = team.weekly || [];
+  const radar = [
+    { metric: 'EPA', value: 82 }, { metric: 'Success', value: 74 }, { metric: 'Explosive', value: 79 },
+    { metric: 'Red Zone', value: 84 }, { metric: '3rd Down', value: 76 }, { metric: 'Defense', value: 71 }
+  ];
+  let title = chartOptions.find(c => c.id === chart)?.label || 'EPA Trend';
+  let sub = chartOptions.find(c => c.id === chart)?.desc || '';
+  let body;
+  if (chart === 'radar') body = <ResponsiveContainer width="100%" height={330}><RadarChart data={radar}><PolarGrid stroke="rgba(255,255,255,.15)"/><PolarAngleAxis dataKey="metric" tick={{ fill: '#d8d8d8', fontSize: 12 }}/><PolarRadiusAxis tick={false} axisLine={false}/><Radar dataKey="value" stroke={colors.red} fill={colors.red} fillOpacity={0.45}/></RadarChart></ResponsiveContainer>;
+  else if (chart === 'success') body = <ResponsiveContainer width="100%" height={330}><AreaChart data={weekly}><defs><linearGradient id="successG" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={colors.red} stopOpacity={0.6}/><stop offset="95%" stopColor={colors.red} stopOpacity={0}/></linearGradient></defs><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Area dataKey="success_rate" stroke={colors.red} fill="url(#successG)" strokeWidth={3}/><Line dataKey="third_down" stroke={colors.gold} strokeWidth={2}/></AreaChart></ResponsiveContainer>;
+  else if (chart === 'explosive') body = <ResponsiveContainer width="100%" height={330}><BarChart data={team.explosives || []}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="type" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="rate" fill={colors.red} radius={[10,10,0,0]}/><Bar dataKey="epa" fill={colors.gold} radius={[10,10,0,0]}/></BarChart></ResponsiveContainer>;
+  else if (chart === 'situational') body = <ResponsiveContainer width="100%" height={330}><BarChart data={team.situational || []} layout="vertical"><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis type="number" stroke="#8d8d8d"/><YAxis type="category" dataKey="name" stroke="#d8d8d8" width={95}/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="value" fill={colors.gold} radius={[0,10,10,0]}/></BarChart></ResponsiveContainer>;
+  else if (chart === 'scoring') body = <ResponsiveContainer width="100%" height={330}><ComposedChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Bar dataKey="points_for" fill={colors.red} radius={[8,8,0,0]}/><Bar dataKey="points_against" fill="rgba(255,255,255,.18)" radius={[8,8,0,0]}/><Line dataKey="wp_swing" stroke={colors.gold} strokeWidth={3}/></ComposedChart></ResponsiveContainer>;
+  else body = <ResponsiveContainer width="100%" height={330}><LineChart data={weekly}><CartesianGrid stroke="rgba(255,255,255,.07)"/><XAxis dataKey="week" stroke="#8d8d8d"/><YAxis stroke="#8d8d8d"/><Tooltip contentStyle={{background:'#111',border:'1px solid #333',borderRadius:12}}/><Line dataKey="off_epa" stroke={colors.red} strokeWidth={3} dot={false}/><Line dataKey="pass_epa" stroke={colors.gold} strokeWidth={2} dot={false}/><Line dataKey="rush_epa" stroke="#fff" strokeWidth={2} dot={false}/><Line dataKey="def_epa_allowed" stroke="#707070" strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer>;
+  return <section className="panel main-chart"><div className="panel-title"><div><h2>{title}</h2><p>{sub}</p></div><BarChart3/></div>{body}</section>;
+}
+
+function GraphLibrary({ chart, setChart }) {
+  return <section className="panel graph-library"><h3>Graph Library</h3>{chartOptions.map(o => { const Icon = o.icon; return <button key={o.id} className={chart === o.id ? 'selected' : ''} onClick={() => setChart(o.id)}><Icon size={18}/><span><b>{o.label}</b><small>{o.desc}</small></span><ChevronRight size={16}/></button>})}</section>;
+}
+
+function PlayerCard({ player, live }) {
+  const match = live.find(p => p.name === player.name || p.id === player.id);
+  const photo = match?.photo || player.photo;
+  return <motion.article className="player-card" whileHover={{ y: -4 }}><div className="photo-wrap"><img src={photo} alt={player.name}/><span>{player.pos}</span></div><h3>{player.name}</h3><div className="player-stats">{player.stats.map(s => <div key={s.label}><span>{s.label}</span><b>{s.value}</b></div>)}</div><ResponsiveContainer width="100%" height={70}><LineChart data={player.trend}><Line dataKey="value" stroke={colors.gold} strokeWidth={2} dot={false}/></LineChart></ResponsiveContainer></motion.article>;
+}
+
+function Command({ team, players, liveRoster, chart, setChart }) {
+  return <><Filters chart={chart} setChart={setChart}/><section className="kpi-grid">{(team.kpis||[]).map((k,i)=><StatCard key={k.label} kpi={k} index={i}/>)}</section><section className="grid"><ChartPanel chart={chart} team={team}/><GraphLibrary chart={chart} setChart={setChart}/></section><section className="grid two"><section className="panel"><h2>Team Leaders</h2><div className="leader-list">{(team.leaders||[]).map(l=><div key={l.stat}><span>{l.stat}</span><b>{l.player}</b><strong>{l.value}</strong></div>)}</div></section><section className="panel"><h2>Featured Player Lab</h2><div className="mini-players">{players.slice(0,3).map(p=><PlayerCard key={p.name} player={p} live={liveRoster}/>)}</div></section></section></>;
+}
+
+function PlayerLab({ players, liveRoster }) {
+  const [q, setQ] = useState('');
+  const filtered = players.filter(p => p.name.toLowerCase().includes(q.toLowerCase()) || p.pos.toLowerCase().includes(q.toLowerCase()));
+  return <><section className="toolbar"><label className="search"><Search size={16}/><input placeholder="Search player or position" value={q} onChange={e=>setQ(e.target.value)}/></label></section><section className="player-grid">{filtered.map(p=><PlayerCard key={p.name} player={p} live={liveRoster}/>)}</section></>;
+}
+
+function VisualLab({ team, chart, setChart }) {
+  return <><GraphLibrary chart={chart} setChart={setChart}/><ChartPanel chart={chart} team={team}/><section className="panel"><h2>Advanced Metrics Table</h2><table><thead><tr><th>Metric</th><th>Offense</th><th>Defense</th><th>Rank</th></tr></thead><tbody>{(team.advancedTable||[]).map(r=><tr key={r.metric}><td>{r.metric}</td><td>{r.offense}</td><td>{r.defense}</td><td>{r.rank}</td></tr>)}</tbody></table></section></>;
+}
+
+function Schedule({ schedule }) {
+  return <section className="schedule-grid">{schedule.map((g,i)=><article className="game-card" key={i}><div><img src={g.logo} alt={g.name}/><span>{g.type}</span></div><h3>{g.opponent} — {g.name}</h3><p>{g.site}</p><small>Week {g.week} · {g.note}</small></article>)}</section>;
+}
+
+function DataTable({ team }) { return <section className="panel"><h2>Weekly Data</h2><table><thead><tr>{['Week','Opp','Result','Off EPA','Pass EPA','Rush EPA','Success','Explosive','Red Zone','3rd Down'].map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{(team.weekly||[]).map(w=><tr key={w.week}><td>{w.week}</td><td>{w.opponent}</td><td className={w.result==='W'?'win':'loss'}>{w.result}</td><td>{w.off_epa}</td><td>{w.pass_epa}</td><td>{w.rush_epa}</td><td>{w.success_rate}%</td><td>{w.explosive_rate}%</td><td>{w.red_zone}%</td><td>{w.third_down}%</td></tr>)}</tbody></table></section> }
+
+function App() {
+  const team = useJson('/data/team.json', { logo:'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png', kpis:[], weekly:[] });
+  const players = useJson('/data/players.json', []);
+  const schedule = useJson('/data/schedule_2026.json', []);
+  const liveRoster = useEspnRoster();
+  const [page, setPage] = useState('command');
+  const [chart, setChart] = useState('epa');
+  return <div className="app"><TopNav page={page} setPage={setPage} team={team}/><main><Header team={team}/>{page==='command' && <Command team={team} players={players} liveRoster={liveRoster} chart={chart} setChart={setChart}/>} {page==='players' && <PlayerLab players={players} liveRoster={liveRoster}/>} {page==='charts' && <VisualLab team={team} chart={chart} setChart={setChart}/>} {page==='schedule' && <Schedule schedule={schedule}/>} {page==='data' && <DataTable team={team}/>}</main></div>;
+}
+
+createRoot(document.getElementById('root')).render(<App/>);

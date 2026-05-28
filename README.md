@@ -1,42 +1,39 @@
-# NinerVision V8 Master Build
+# NinerVision V9
 
-Premium, mobile-first 49ers Intelligence platform for Vercel.
+Premium 49ers Intelligence platform build.
 
-## Included
-- Compact premium layout
-- Mobile bottom nav
-- Full data filters: season, regular season, regular + playoffs, week selection
-- Team Tier Chart V2 with gradient zones and team logos
-- NFL Landscape page
-- Visual Lab with focus mode
-- QB Lab
-- Player Lab with search/status filters
-- Clickable Matchup Intelligence Center
-- Why Engine V2
-- Trend/State of Team sections
-- Content Creator Mode
-- Data Engine with real nflverse pipeline starter
-
-## Deploy
-Upload these to GitHub root:
+## Upload to GitHub
+Upload these files/folders:
 - src/
 - public/
 - scripts/
-- index.html
 - package.json
-- package-lock.json optional
+- package-lock.json
+- index.html
 - vite.config.js
 - vercel.json
+- README.md
 
-Vercel build command: npm run build
-Output directory: dist
+Do not upload node_modules or dist.
 
-## Real data
-The app currently imports demo fallback JSON so the site always builds. To generate real data locally:
+## Real data refresh
+From the project folder:
 
 ```bash
-pip install pandas nflreadpy pyarrow
-python scripts/build_real_nflverse_data.py --season 2025
+pip3 install nflreadpy pandas pyarrow numpy
+python3 scripts/build_real_nflverse_data.py --season 2025
 ```
 
-Then commit generated JSON files from public/data/.
+Then commit the generated `public/data` files.
+
+## V9 highlights
+- Futuristic NinerVision front page
+- Real-data-first loader with demo fallbacks
+- Team Tiers V3 with gradients, diagonal lines, logos, export PNG
+- Unified chart system
+- Advanced mobile UX with bottom nav
+- Player Lab V2 foundation
+- QB Lab
+- Matchup Intelligence Center
+- Content Creator Mode
+- Full functionality pass for visible buttons/interactions

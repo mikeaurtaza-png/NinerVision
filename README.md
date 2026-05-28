@@ -1,11 +1,9 @@
-# NinerVision V11
+# NinerVision 2.0
 
-Premium/mobile hotfix build.
+A premium football intelligence rebuild focused on mobile fit, compact charts, league context, position-relative player cards, personnel intelligence, and branded exports.
 
-Before uploading, copy your real generated data files into `public/data/`:
-- `league_2025.json`
-- `players_2025.json`
-- `qbs_2025.json`
-- optional `2025/` week folder
-
-This build has no `package-lock.json` and no `node_modules`.
+Before upload, copy your generated real files into `public/data`:
+- league_2025.json
+- players_2025.json
+- qbs_2025.json
+- 2025/ folder if available

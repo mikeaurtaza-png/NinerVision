@@ -156,32 +156,98 @@ def summarize_teams(pbp):
     return rows
 
 
-def summarize_players(rosters, weekly, season: int):
+def summarize_players(rosters, weekly, pbp, season: int):
+    """Create a league-wide QB/RB/WR/TE player file.
+    The frontend shows only SF in selectors but uses all NFL players for true position-relative ranks.
+    """
     import pandas as pd
     team_col = "team" if "team" in rosters.columns else "recent_team" if "recent_team" in rosters.columns else None
-    sf = rosters[rosters[team_col] == "SF"] if team_col else rosters.iloc[0:0]
+    pos_col = "position" if "position" in rosters.columns else "position_group" if "position_group" in rosters.columns else None
+    skill = rosters[rosters[pos_col].isin(["QB", "RB", "WR", "TE"])] if pos_col else rosters.iloc[0:0]
+
+    # weekly season totals by player name/id
+    weekly_totals = {}
+    if weekly is not None and not weekly.empty:
+        id_col = "player_id" if "player_id" in weekly.columns else "gsis_id" if "gsis_id" in weekly.columns else None
+        name_col = "player_name" if "player_name" in weekly.columns else "player_display_name" if "player_display_name" in weekly.columns else None
+        group_cols = [c for c in [id_col, name_col, "recent_team"] if c and c in weekly.columns]
+        if group_cols:
+            for key, g in weekly.groupby(group_cols, dropna=False):
+                if not isinstance(key, tuple): key = (key,)
+                vals = dict(zip(group_cols, key))
+                stats = {}
+                for out_key, col in {
+                    "attempts":"attempts", "completions":"completions", "pass_yards":"passing_yards", "pass_tds":"passing_tds", "interceptions":"interceptions", "sacks":"sacks",
+                    "carries":"carries", "rush_yards":"rushing_yards", "rush_tds":"rushing_tds",
+                    "targets":"targets", "receptions":"receptions", "receiving_yards":"receiving_yards", "receiving_tds":"receiving_tds"
+                }.items():
+                    if col in g.columns:
+                        val = g[col].fillna(0).sum()
+                        if float(val) != 0: stats[out_key] = int(val)
+                weekly_totals[str(vals.get(id_col) or vals.get(name_col))] = stats
+                if vals.get(name_col): weekly_totals[str(vals.get(name_col))] = stats
+
+    # play-by-play advanced summaries
+    adv_by_player = {}
+    if pbp is not None and len(pbp):
+        if {"passer_player_name", "passer_player_id", "epa"}.issubset(pbp.columns):
+            passes = pbp[pbp.get("pass", 0).eq(1)] if "pass" in pbp.columns else pbp
+            for (pid, name), g in passes.groupby(["passer_player_id", "passer_player_name"], dropna=True):
+                if len(g) < 20: continue
+                d = adv_by_player.setdefault(str(pid), {})
+                adv_by_player.setdefault(str(name), d)
+                d["epa"] = mean(g["epa"])
+                d["success"] = round(float((g["epa"] > 0).mean()), 6)
+                if "cpoe" in g.columns: d["cpoe"] = mean(g["cpoe"])
+                if "air_yards" in g.columns: d["adot"] = mean(g["air_yards"])
+                if "yardline_100" in g.columns:
+                    rz = g[g["yardline_100"] <= 20]
+                    if len(rz): d["red"] = mean(rz["epa"])
+                third = g[g["down"] == 3] if "down" in g.columns else None
+                if third is not None and len(third): d["third"] = round(float((third["epa"] > 0).mean()), 6)
+        if {"receiver_player_name", "receiver_player_id", "epa"}.issubset(pbp.columns):
+            rec = pbp[pbp["receiver_player_id"].notna()].copy()
+            for (pid, name), g in rec.groupby(["receiver_player_id", "receiver_player_name"], dropna=True):
+                d = adv_by_player.setdefault(str(pid), {})
+                adv_by_player.setdefault(str(name), d)
+                d["epaTarget"] = mean(g["epa"])
+                d["success"] = round(float((g["epa"] > 0).mean()), 6)
+                if "air_yards" in g.columns: d["adot"] = mean(g["air_yards"])
+                if "yards_after_catch" in g.columns: d["yac"] = mean(g["yards_after_catch"])
+                if "yards_gained" in g.columns:
+                    d["explosive"] = round(float((g["yards_gained"].fillna(0) >= 20).mean()), 6)
+                if "yardline_100" in g.columns:
+                    d["red_targets"] = int((g["yardline_100"] <= 20).sum())
+        if {"rusher_player_name", "rusher_player_id", "epa"}.issubset(pbp.columns):
+            rush = pbp[pbp["rusher_player_id"].notna()].copy()
+            for (pid, name), g in rush.groupby(["rusher_player_id", "rusher_player_name"], dropna=True):
+                d = adv_by_player.setdefault(str(pid), {})
+                adv_by_player.setdefault(str(name), d)
+                d["epa"] = mean(g["epa"])
+                d["success"] = round(float((g["epa"] > 0).mean()), 6)
+                if "yards_gained" in g.columns:
+                    d["explosive"] = round(float((g["yards_gained"].fillna(0) >= 10).mean()), 6)
+
     out = []
-    for _, r in sf.iterrows():
+    for _, r in skill.iterrows():
         name = r.get("player_name") or r.get("full_name") or r.get("display_name") or r.get("football_name")
-        if not name:
-            continue
+        if not name: continue
         pid = r.get("gsis_id") or r.get("player_id") or r.get("espn_id") or str(name).lower().replace(" ", "-")
-        pos = r.get("position") or r.get("position_group") or ""
+        pos = r.get(pos_col) if pos_col else ""
+        team = r.get(team_col) if team_col else r.get("recent_team") or ""
         headshot = r.get("headshot_url") or r.get("espn_headshot") or ""
         stats = {}
-        if weekly is not None and not weekly.empty:
-            key_cols = [c for c in ["player_id", "gsis_id", "player_name"] if c in weekly.columns]
-            if key_cols:
-                w = weekly[(weekly[key_cols[0]] == pid) | (weekly.get("player_name", pd.Series(dtype=str)) == name)] if key_cols[0] in weekly.columns else weekly.iloc[0:0]
-                if len(w):
-                    for label, col in [("Targets","targets"),("Receptions","receptions"),("Receiving Yds","receiving_yards"),("Rush Yds","rushing_yards"),("Pass Yds","passing_yards")]:
-                        if col in w.columns:
-                            val = w[col].fillna(0).sum()
-                            if val:
-                                stats[label] = int(val)
-        out.append({"id": str(pid), "name": name, "pos": pos, "status": r.get("status") or "ACTIVE", "headshot": headshot, "stats": stats, "rank": "—"})
+        stats.update(weekly_totals.get(str(pid), {}))
+        stats.update(weekly_totals.get(str(name), {}))
+        stats.update(adv_by_player.get(str(pid), {}))
+        stats.update(adv_by_player.get(str(name), {}))
+        if stats.get("targets") and stats.get("receptions") is not None:
+            stats["catch"] = round(stats["receptions"] / stats["targets"], 6)
+        if stats.get("carries") and stats.get("rush_yards") is not None:
+            stats["yards_per_carry"] = round(stats["rush_yards"] / stats["carries"], 3)
+        usage = stats.get("attempts") or stats.get("targets") or stats.get("carries") or stats.get("touches") or 0
+        out.append({"id": str(pid), "name": name, "pos": pos, "team": team, "status": r.get("status") or "ACTIVE", "headshot": headshot, "usage": usage, "stats": stats})
     return out
-
 
 def summarize_qbs(pbp):
     if not {"passer_player_name", "passer_player_id", "posteam", "epa"}.issubset(pbp.columns):
@@ -236,7 +302,7 @@ def build(season: int):
             for week, frame in post.groupby("week"):
                 write_json(base / str(season) / "playoffs" / f"week_{int(week):02d}.json", summarize_teams(frame))
 
-    players = summarize_players(rosters, weekly, season)
+    players = summarize_players(rosters, weekly, reg, season)
     qbs = summarize_qbs(reg)
     write_json(base / f"players_{season}.json", players)
     write_json(base / f"qbs_{season}.json", qbs)

@@ -1,18 +1,11 @@
-# NinerVision V10
+# NinerVision V11
 
-Premium 49ers Intelligence platform. Free-first architecture: React/Vite frontend, local JSON data generated from nflverse/free public data.
+Premium/mobile hotfix build.
 
-## Deploy
-- Upload project contents to GitHub.
-- Delete any `package-lock.json` if it points to a private/internal registry.
-- Import to Vercel.
+Before uploading, copy your real generated data files into `public/data/`:
+- `league_2025.json`
+- `players_2025.json`
+- `qbs_2025.json`
+- optional `2025/` week folder
 
-## Real data
-Run locally when you need fresh data:
-
-```bash
-pip3 install nflreadpy pandas pyarrow numpy
-python3 scripts/build_real_nflverse_data.py
-```
-
-Then upload the generated `public/data` files to GitHub.
+This build has no `package-lock.json` and no `node_modules`.
